@@ -1,0 +1,45 @@
+body{
+   background-color: #89F336
+}
+
+header{
+
+}
+
+h1{
+    text-align:left;
+    margin-top:60px;
+    color: green;
+    font-size: 3em;
+    font-family: Papyrus;
+}
+
+#introduction{  /*Welcome message*/
+    text-align: center;
+    font-size: 2em;
+    font-family: Papyrus;
+}
+
+#team{ /*Names*/
+    border: 3px ridge whitesmoke;
+    text-align: center;
+    font-size:17px;
+}
+
+#rulesOfTheGames{
+    color:#780606;
+}
+
+#startGame{ /*button*/
+    color:#780606;
+    border-radius:8px;
+}
+
+footer{
+    text-align: center;
+    border: 3px solid whitesmoke;
+    background-color: darkgreen;
+    padding: 10px;
+    margin-top:200px;
+}
+
