@@ -3,12 +3,15 @@ body{
 }
 
 header{
+
+}
+
+h1{
     text-align:left;
     margin-top:60px;
-    color: rgba(0, 128, 0, 0.4);
-    font-size: 2em;
+    color: green;
+    font-size: 3em;
     font-family: Papyrus;
-
 }
 
 #introduction{  /*Welcome message*/
@@ -32,11 +35,6 @@ header{
     border-radius:8px;
 }
 
-#startGame:hover{
-    padding:4px 8px;
-    font-size:14px;
-}
-
 footer{
     text-align: center;
     border: 3px solid whitesmoke;
@@ -44,3 +42,4 @@ footer{
     padding: 10px;
     margin-top:200px;
 }
+
