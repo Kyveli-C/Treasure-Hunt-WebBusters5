@@ -11,13 +11,11 @@ h1{
     margin-top:60px;
     color: green;
     font-size: 3em;
-    font-family: Papyrus;
 }
 
 #introduction{  /*Welcome message*/
     text-align: center;
     font-size: 2em;
-    font-family: Papyrus;
 }
 
 #team{ /*Names*/
@@ -38,7 +36,7 @@ h1{
 footer{
     text-align: center;
     border: 3px solid whitesmoke;
-    background-color: whitesmoke;
+    background-color: black;
     padding: 10px;
     margin-top:200px;
 }
