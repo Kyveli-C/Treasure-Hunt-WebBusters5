@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>App</title>
+</head>
+<body>
+
+<!--refresh button-->
+
+<!--go back button-->
+
+
+
+Select a Treasure Hunt:
+<!--list to display the available treasure hunts -->
+<ul id="treasureHuntList">
+
+
+</ul>
+
+
+
+
+<script>
+
+    function getChallenges()
+    {
+        fetch("https://codecyprus.org/th/api/list")
+            .then(response => response.json()) //Parse JSON text to JavaScript object
+            .then(jsonObject => {
+                console.log(jsonObject);//TODO - Success, do something with the data.
+
+                let huntsArray = jsonObject.treasureHunts; //get the arrays
+
+                let list = document.getElementById("treasureHuntList"); //get the list
+
+
+                for (let i = 0; i < huntsArray.length; i++) {
+                    let listItem = document.createElement('li'); //create bullets
+                    let getuuid = huntsArray[i].uuid; //parameter to add in the url
+
+                    listItem.innerHTML = "<a href='https://codecyprus.org/th/api/start?player=Kyveli.&app=WebBusters5App&treasure-hunt-id= " + getuuid + "'> " + huntsArray[i].name + " </a>";
+                    list.appendChild(listItem);
+
+                }
+            });
+    }
+    getChallenges();
+
+
+</script>
+
+
+
+
+</body>
+</html>
