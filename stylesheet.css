@@ -21,9 +21,13 @@ h1{
 }
 
 #team{ /*Names*/
-    border: 3px ridge whitesmoke;
+    border: 3px ridge darkred;
+    border-radius: 25px;
+    box-shadow: 10px 10px gray;
+    padding: 10px;
     text-align: center;
     font-size:17px;
+    background-color: floralwhite;
 }
 
 #rulesOfTheGames{
