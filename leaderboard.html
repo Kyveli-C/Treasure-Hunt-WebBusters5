@@ -9,59 +9,100 @@
 </head>
 <body>
 
-
 <div class="leaderboard">
-<h1> Your Score:</h1>
-<div id="score_container"> </div>
+<h1>Your Score:</h1>
+<div id="score_container"></div>
 
-
-<h1> Leader Board:</h1>
+<h1>Leader Board:</h1>
 <div id="leaderBoard_container"></div>
+
+<!-- Small UX improvement -->
+<button id="refreshBtn" class="socialBtn">Refresh</button>
+
 </div>
+
 <script>
 
-    const session=getCookie("sessionId");
-    console.log(session);
+const session = getCookie("sessionId");
+console.log(session);
 
-//player's score
-function showPlayerScore()
-{
+// If no session, show message instead of undefined
+if (!session) {
+    document.getElementById("score_container").innerHTML =
+        "No active session found. Please start a game first.";
+    document.getElementById("leaderBoard_container").innerHTML =
+        "Leaderboard unavailable without an active session.";
+}
+else {
+    showPlayerScore();
+    showLeaderBoard();
+}
+
+// Refresh button functionality
+document.getElementById("refreshBtn").addEventListener("click", function () {
+    if (session) {
+        showPlayerScore();
+        showLeaderBoard();
+    }
+});
+
+// Player's score
+function showPlayerScore() {
     fetch(`https://codecyprus.org/th/api/score?session=${session}`)
         .then(response => response.json())
         .then(jsonObject => {
             console.log(jsonObject);
 
-            let score=document.getElementById('score_container');
-            score.innerHTML=jsonObject.score;
+            let score = document.getElementById('score_container');
 
+            // Handle API error
+            if (jsonObject.status && jsonObject.status !== "OK") {
+                score.innerHTML = "Error loading score.";
+                return;
+            }
 
+            score.innerHTML = jsonObject.score;
+        })
+        .catch(error => {
+            document.getElementById('score_container').innerHTML =
+                "Network error.";
         });
 }
 
-showPlayerScore();
-
-
-function showLeaderBoard()
-{
-    fetch(`https://codecyprus.org/th/api/leaderboard?session=${session}&sorted&limit=10`)
+function showLeaderBoard() {
+    fetch(`https://codecyprus.org/th/api/leaderboard?session=${session}&sorted=true&limit=10`)
         .then(response => response.json())
         .then(jsonObject => {
             console.log(jsonObject);
 
-     let leaderBoardArray= jsonObject.leaderboard;
-     let showPosition=document.getElementById("leaderBoard_container");
-     showPosition.innerHTML="";
-     for (let i=0; leaderBoardArray.length; i++)
-             {
-                 let position=document.createElement("p");
-                 position.innerHTML=leaderBoardArray[i].player+" ->  "+leaderBoardArray[i].score;
-                 showPosition.appendChild(position);
+            let leaderBoardArray = jsonObject.leaderboard;
+            let showPosition = document.getElementById("leaderBoard_container");
+            showPosition.innerHTML = "";
 
-             }
+            if (!leaderBoardArray || leaderBoardArray.length === 0) {
+                showPosition.innerHTML = "No leaderboard data available.";
+                return;
+            }
+
+            // FIXED LOOP CONDITION
+            for (let i = 0; i < leaderBoardArray.length; i++) {
+                let position = document.createElement("p");
+
+                // Added ranking number
+                position.innerHTML =
+                    (i + 1) + ". " +
+                    leaderBoardArray[i].player +
+                    " → " +
+                    leaderBoardArray[i].score;
+
+                showPosition.appendChild(position);
+            }
+        })
+        .catch(error => {
+            document.getElementById("leaderBoard_container").innerHTML =
+                "Network error.";
         });
 }
-
-showLeaderBoard();
 
 </script>
 
@@ -69,21 +110,23 @@ showLeaderBoard();
 <h1>Thank you for playing our game!</h1>
 
 <footer id="footer">
-    <div id="FollowUs ">
+    <!-- removed trailing space in id -->
+    <div id="FollowUs">
         <p>Follow us on:</p>
 
         <a href="https://www.instagram.com/web.busters5/" target="_blank">
-            <button class ="socialBtn">Instagram</button>
+            <button class="socialBtn">Instagram</button>
         </a>
 
         <a href="https://www.instagram.com/web.busters5/" target="_blank">
-            <button class ="socialBtn">TikTok</button>
+            <button class="socialBtn">TikTok</button>
         </a>
 
         <a href="https://x.com/Web_Busters5" target="_blank">
-            <button class ="socialBtn">Twitter</button>
+            <button class="socialBtn">Twitter</button>
         </a>
     </div>
 </footer>
+
 </body>
 </html>

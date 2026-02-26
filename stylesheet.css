@@ -22,16 +22,18 @@ body{
 h1{
     text-align:left;
     margin-top:0;
-    color: darkgreen;
+    color: #2ecc71; /* brighter modern green */
     font-size: clamp(1.5rem, 4vw, 2.5rem);
-    font-family: sans-serif ;
-    text-shadow:2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: sans-serif;
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
     margin-bottom: 10px;
 }
 
 h2{
     color:black;
 }
+
 #introduction{  /*Welcome message*/
     text-align: left;
     font-size: 1.5em;
@@ -60,16 +62,17 @@ h2{
 #ruleslist{
     color:antiquewhite;
 }
+
 #Help:hover{
     background-color: darkgreen;
     color: white;
     font-size:14px;
 }
+
 #startGame{ /*button*/
     color: #1f2023;
     border-radius:8px;
     min-height: 40px;
-
 }
 
 footer{
@@ -78,7 +81,9 @@ footer{
     padding: 8px;
     margin-top: auto;
 }
-#followUs {
+
+/* FIXED: match your HTML id="FollowUs" */
+#FollowUs {
     text-align: left;
     margin-top: 8px;
 }
@@ -87,35 +92,34 @@ footer{
     margin:6px 0;
     background-color: darkgreen;
     color: white;
-
 }
 
 #startGame:hover,.socialBtn:hover{
     background-color: darkgreen;
     color: #ffffff;
     font-size:14px;
-
 }
 
 p{
     margin: 6px 0;
 }
 
+/* UPDATED: modern refresh button (not floating, not childish) */
 #refreshBtn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: darkgreen;
-    color: white;
-    border: 3px solid whitesmoke;
-    padding: 8px 14px;
-    border-radius: 50%;
-    font-size: 18px;
+    position: static;
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(0,0,0,0.25);
+    color: antiquewhite;
+    font-size: 14px;
     cursor: pointer;
+    backdrop-filter: blur(6px);
 }
 
 #refreshBtn:hover {
-    background-color: darkgreen;
+    background: rgba(0,0,0,0.35);
 }
 
 .Hunt-box1 {
@@ -170,20 +174,31 @@ p{
         padding: 12px;
     }
 }
+
+/* UPDATED: premium modern leaderboard (subtle glass look) */
 .leaderboard{
-    background-color: darkgrey;
+    background: rgba(30, 30, 30, 0.65);
+    backdrop-filter: blur(10px);
     padding: 40px 60px;
     border-radius: 20px;
     text-align: center;
-    width: min(350px, 90vw);
-    box-shadow: 0 0 25px black;
+    width: min(420px, 92vw);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.12);
+}
 
-}
+/* UPDATED: premium rows */
 #leaderBoard_container p{
-    margin: 6px 0;
-    font-size: clamp(1rem, 4vw, 1.5rem);
+    margin: 8px 0;
+    font-size: clamp(1rem, 4vw, 1.25rem);
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
 }
+
 #score_container{
     font-size: clamp(1rem, 4vw, 1.5rem);
     margin-bottom : 20px;
+    font-weight: 600;
 }
