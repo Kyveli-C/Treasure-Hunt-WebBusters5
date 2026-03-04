@@ -4,26 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Questions page</title>
-    <link rel="stylesheet" href="stylesheet.css">
+
+    <link rel="stylesheet" href="questions.css">
     <script src="js/instascan.min.js"></script>
     <script src="cookies.js"></script>
 </head>
 <body>
 
-<video id="preview" width="420" height="300" autoplay muted playsinline ></video>
-
 <div style="margin: 20px; padding: 20px; background-color: black; color: white; text-align: center;" id="content">
     Scan a QR code to get a hint...
 </div>
 
-<h1> Treasure Hunt Questions</h1>
-<div id="question_container">
-    <p id="question_text"> Loading question </p> <br>
-    <p id="answer_text"> Loading answer </p> <br>
-    <p id="feedback_text"> Loading feedback </p>
-    <p id="score_text"> Loading score </p>
-    <h1> Your Score:</h1>
-    <div id="score_container"> </div>
+
+<div class="main-layout">
+
+    <div class="question-card">
+        <h1>Treasure Hunt Questions</h1>
+
+        <div class="question-header">
+            <h2>Treasure Hunt Question</h2>
+            <div class="score-box">
+                Score: <span id="score_container">0</span>
+            </div>
+        </div>
+
+        <p id="question_text" class="question-text">
+            Loading question...
+        </p>
+
+        <div id="answer_text" class="answers"></div>
+
+        <p id="feedback_text" class="feedback"></p>
+    </div>
+
+    <div class="camera-container">
+        <video id="preview" autoplay muted playsinline></video>
+    </div>
 
 </div>
 
@@ -51,6 +67,7 @@ function getQuestions()
 
                 let displayQuestion=document.getElementById("question_text");
                 let giveAnswer = document.getElementById("answer_text");
+
 
                 giveAnswer.innerHTML=""; //clear previous input
 
@@ -107,6 +124,7 @@ function getQuestions()
 
                 const submitButton = document.createElement("button");
                 submitButton.textContent = "Check";
+                submitButton.id= "submit";
                 submitButton.type="submit";
                 submitButton.onclick = submitAnswers;
                 giveAnswer.appendChild(submitButton);
@@ -115,6 +133,7 @@ function getQuestions()
                 skipButton.textContent = "Skip Question";
                 skipButton.type="button";
                 skipButton.onclick = skipQuestion;
+                skipButton.id= "skipButton";
                 giveAnswer.appendChild(skipButton);
                 }
                 // const answerByThePlayer=document.getElementById("answer_text").value;
@@ -310,21 +329,7 @@ Instascan.Camera.getCameras().then(function (cameras) {
 
 
 <footer id="footer">
-    <div id="FollowUs ">
-        <p>Follow us on:</p>
 
-        <a href="https://www.instagram.com/web.busters5/" target="_blank">
-            <button class ="socialBtn">Instagram</button>
-        </a>
-
-        <a href="https://www.instagram.com/web.busters5/" target="_blank">
-            <button class ="socialBtn">TikTok</button>
-        </a>
-
-        <a href="https://x.com/Web_Busters5" target="_blank">
-            <button class ="socialBtn">Twitter</button>
-        </a>
-    </div>
 </footer>
 
 </body>
