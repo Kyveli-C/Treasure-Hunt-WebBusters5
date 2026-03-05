@@ -21,7 +21,7 @@ body{
 .question-card{
     background: rgba(15, 10, 5, 0.85);
     backdrop-filter: blur(8px);
-    padding: 40px;
+    padding: clamp(18px, 4vw, 40px);
     border-radius: 25px;
     width: min(600px, 92vw);
     box-shadow: 0 20px 40px rgba(0,0,0,0.7);
@@ -170,17 +170,50 @@ body{
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    gap: 50px;
+    gap: 16px;
+    width: 100%;
+    padding: 0 12px 20px;
 }
+@media (min-width: 900px) {
+    .main-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 0 10px 16px;
+    }
 
-.camera-container {
+    @media (max-width: 900px) {
+        .main-layout {
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 40px;
+            padding: 0 12px 20px;
+        }
+    }
+
+
+    #preview {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4/3;
+        height: auto;
+    }
+
+
+    .camera-container {
         width: min(460px, 94vw);
         max-width: 100%;
         border-radius: 10px;
         overflow: hidden;
     }
-   *,
+    *,
     *::before,
     *::after{
         box-sizing: border-box;
     }
+
+
+}
