@@ -173,8 +173,14 @@ body{
     gap: 50px;
 }
 
-.camera-container{
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
+.camera-container {
+        width: min(460px, 94vw);
+        max-width: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+   *,
+    *::before,
+    *::after{
+        box-sizing: border-box;
+    }
