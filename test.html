@@ -66,6 +66,113 @@
         }
         getChallenges();
 
+        function showLeaderBoard()
+        {
+            fetch(`https://codecyprus.org/th/test-api/leaderboard?session=${session}&sorted=true&limit=10`)
+                .then(response => response.json())
+                .then(jsonObject => {
+                    console.log(jsonObject);
+
+                    let leaderBoardArray = jsonObject.leaderboard;
+                    let showPosition = document.getElementById("leaderBoard_container");
+                    showPosition.innerHTML = "";
+
+                    if (!leaderBoardArray || leaderBoardArray.length === 0) {
+                        showPosition.innerHTML = "No leaderboard data available.";
+                        return;
+                    }
+
+                    // FIXED LOOP CONDITION
+                    for (let i = 0; i < leaderBoardArray.length; i++) {
+                        let position = document.createElement("p");
+
+                        // Added ranking number
+                        position.innerHTML =
+                            (i + 1) + ". " +
+                            leaderBoardArray[i].player +
+                            " → " +
+                            leaderBoardArray[i].score;
+
+                        showPosition.appendChild(position);
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("leaderBoard_container").innerHTML =
+                        "Network error.";
+                });
+        }
+        showLeaderBoard();
+
+        function getQuestions()
+        {
+            fetch(`https://codecyprus.org/th/test-api/question?session=${session}`)
+                .then(response => response.json())
+                .then(jsonObject => {
+                    requiresLocationQuestion = (jsonObject.requiresLocation === true);
+                    locationSentQuestion = false;
+
+                    let displayQuestion = document.getElementById("question_text");
+                    let giveAnswer = document.getElementById("answer_text");
+
+                    giveAnswer.innerHTML = "";
+                    setFeedback("");
+
+                    if (jsonObject.status !== "OK") {
+                        displayQuestion.textContent = "No questions found!";
+                        setFeedback("No questions found.", false);
+                        return;
+                    }
+
+                    displayQuestion.innerHTML = (jsonObject.questionText || "").split("<br>")[0].trim();
+
+                    const input = document.createElement("input");
+                    input.id = "answer";
+
+                    // Keep MCQ as TEXT input because API often expects A/B/C/D manually
+                    if (jsonObject.questionType === "INTEGER" || jsonObject.questionType === "NUMERIC") {
+                        input.type = "number";
+                        input.placeholder = "Enter your answer";
+                    } else if (jsonObject.questionType === "BOOLEAN") {
+                        input.type = "text";
+                        input.placeholder = "Enter true / false";
+                    } else if (jsonObject.questionType === "MCQ") {
+                        input.type = "text";
+                        input.placeholder = "Enter A / B / C / D";
+                    } else {
+                        input.type = "text";
+                        input.placeholder = "Enter your answer";
+                    }
+
+                    giveAnswer.appendChild(input);
+
+                    const submitButton = document.createElement("button");
+                    submitButton.textContent = "Check";
+                    submitButton.id = "submit";
+                    submitButton.type = "button";
+                    submitButton.onclick = submitAnswers;
+                    giveAnswer.appendChild(submitButton);
+
+                    const skipButton = document.createElement("button");
+                    skipButton.textContent = "Skip Question";
+                    skipButton.type = "button";
+                    skipButton.onclick = skipQuestion;
+                    skipButton.id = "skipButton";
+                    giveAnswer.appendChild(skipButton);
+
+                    if (jsonObject.canBeSkipped === false) {
+                        skipButton.disabled = true;
+                        setFeedback("This question cannot be skipped.", null);
+                    }
+
+                    input.addEventListener("keydown", (e) => {
+                        if (e.key === "Enter") submitAnswers();
+                    });
+
+                    showPlayerScore();
+                })
+                .catch(() => setFeedback("Network error while loading question.", false));
+        }
+        getQuestions();
     </script>
 </div>
 
@@ -211,8 +318,6 @@
         </a>
     </div>
 </footer>
-
-
 
 </body>
 </html>
