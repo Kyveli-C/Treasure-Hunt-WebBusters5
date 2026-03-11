@@ -97,11 +97,17 @@ function getQuestions() {
                 input.type = "number";
                 input.placeholder = "Enter your answer";
             } else if (jsonObject.questionType === "BOOLEAN") {
-                input.type = "text";
-                input.placeholder = "Enter true / false";
+                giveAnswer.innerHTML=
+                    '<button onclick="submitButtonsAnswers(\'true\')">True</button>' +
+                    '<button onclick="submitButtonsAnswers(\'false\')">False</button>';
+                return;
             } else if (jsonObject.questionType === "MCQ") {
-                input.type = "text";
-                input.placeholder = "Enter A / B / C / D";
+        giveAnswer.innerHTML =
+            '<button onclick="submitButtonsAnswers(\'A\')">A</button>' +
+            '<button onclick="submitButtonsAnswers(\'B\')">B</button>' +
+            '<button onclick="submitButtonsAnswers(\'C\')">C</button>' +
+            '<button onclick="submitButtonsAnswers(\'D\')">D</button>';
+        return;
             } else {
                 input.type = "text";
                 input.placeholder = "Enter your answer";
@@ -129,17 +135,27 @@ function getQuestions() {
             }
 
             input.addEventListener("keydown", (e) => {
-                if (e.key === "Enter") submitAnswers();
+                if (e.key === "Enter")
+                    submitAnswers();
             });
 
             showPlayerScore();
         })
         .catch(() => setFeedback("Network error while loading question.", false));
 }
+function submitButtonsAnswers(answer) {
+    pendingAnswer = answer;
+    submitAnswers();
+}
+
 
 function submitAnswers() {
-    let playersAnswers = document.getElementById("answer").value.trim();
+    // let playersAnswers = document.getElementById("answer").value.trim();
+    const answerInput = document.getElementById("answer");
+    let playersAnswers = pendingAnswer || (answerInput ? answerInput.value.trim() : "");
     pendingAnswer = playersAnswers;
+    if (answerInput)
+        answerInput.value = "";
 
     if (!playersAnswers) {
         setFeedback("Please enter an answer.", false);
@@ -164,6 +180,7 @@ function submitAnswers() {
             if (jsonObject.correct === true) setFeedback("Correct ✅", true);
             else if (jsonObject.correct === false) setFeedback("Wrong ❌", false);
             else setFeedback(jsonObject.message || "Submitted.", null);
+            pendingAnswer="";
 
             if (jsonObject.completed === false) {
                 setTimeout(getQuestions, 250);
