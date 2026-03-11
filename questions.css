@@ -209,9 +209,10 @@ body{
         border-radius: 10px;
         overflow: hidden;
     }
+
     *,
     *::before,
-    *::after{
+    *::after {
         box-sizing: border-box;
     }
 
