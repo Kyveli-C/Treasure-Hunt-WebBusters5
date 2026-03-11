@@ -152,7 +152,13 @@ function submitButtonsAnswers(answer) {
 function submitAnswers() {
     // let playersAnswers = document.getElementById("answer").value.trim();
     const answerInput = document.getElementById("answer");
-    let playersAnswers = pendingAnswer || (answerInput ? answerInput.value.trim() : "");
+    let playersAnswers = "";
+
+    if (pendingAnswer) {
+        playersAnswers = pendingAnswer;
+    } else if (answerInput) {
+        playersAnswers = answerInput.value.trim();
+    }
     pendingAnswer = playersAnswers;
     if (answerInput)
         answerInput.value = "";
