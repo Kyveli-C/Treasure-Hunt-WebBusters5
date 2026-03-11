@@ -207,26 +207,30 @@ p{
     }
     .page{
         max-width: 100%;
+        max-width: 100%;
         padding: 12px;
         min-height: auto;
         gap: 10px;
     }
     h1{
         font-size: clamp(1.5rem, 6vw, 2rem);
-        margin-bottom: 12px;
+        margin-bottom: 10px;
+        line-height: 1.2;
     }
 
     #introduction{
-        font-size: 1em;
+        font-size: 1rem;
+        line-height: 1.4;
     }
     #team{
-        border-radius: 20px;
+        border-radius: 16px;
         padding: 10px;
         font-size: 15px;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     }
     #rulesOfTheGames{
         padding: 12px;
+        line-height: 1.35;
     }
 }
 .leaderboard{
@@ -244,5 +248,5 @@ p{
 }
 #score_container{
     font-size: clamp(1rem, 4vw, 1.5rem);
-    margin-bottom : 20px;
+    margin-bottom : 14px;
 }
