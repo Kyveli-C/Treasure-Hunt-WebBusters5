@@ -16,7 +16,10 @@
 <div style="margin: 20px; padding: 20px; background-color: black; color: white; text-align: center;" id="content">
     Scan a QR code to get a hint...
 </div>
-
+<label class="switch">
+    <input type="checkbox" id="cameraToggle">
+    <span class="slider round"></span>
+</label>
 <div class="main-layout">
     <div class="question-card">
         <h1>Treasure Hunt Questions</h1>
@@ -298,9 +301,36 @@ async function showPosition(position) {
     }
 }
 
- 
-  getQuestions();
-  showPlayerScore();
+let scanner = new Instascan.Scanner({///this need editingg more (gaith)
+    video: document.getElementById("preview")
+});
+
+scanner.addListener('scan', function (content) {
+    document.getElementById("content").textContent = content;
+    setFeedback("QR code scanned.", true);
+});
+
+document.getElementById("cameraToggle").addEventListener("change", function () {
+    if (this.checked) {
+        Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+            } else {
+                setFeedback("No camera found.", false);
+                document.getElementById("cameraToggle").checked = false;
+            }
+        }).catch(function () {
+            setFeedback("Could not open camera.", false);
+            document.getElementById("cameraToggle").checked = false;
+        });
+    } else {
+        scanner.stop();
+        document.getElementById("preview").srcObject = null;
+    }
+});
+
+getQuestions();
+showPlayerScore();
 
 </script>
 
