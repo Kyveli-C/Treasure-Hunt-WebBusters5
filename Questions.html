@@ -16,10 +16,7 @@
 <div style="margin: 20px; padding: 20px; background-color: black; color: white; text-align: center;" id="content">
     Scan a QR code to get a hint...
 </div>
-<label class="switch">
-    <input type="checkbox" id="cameraToggle">
-    <span class="slider round"></span>
-</label>
+
 <div class="main-layout">
     <div class="question-card">
         <h1>Treasure Hunt Questions</h1>
@@ -100,17 +97,11 @@ function getQuestions() {
                 input.type = "number";
                 input.placeholder = "Enter your answer";
             } else if (jsonObject.questionType === "BOOLEAN") {
-                giveAnswer.innerHTML=
-                    '<button onclick="submitButtonsAnswers(\'true\')">True</button>' +
-                    '<button onclick="submitButtonsAnswers(\'false\')">False</button>';
-                return;
+                input.type = "text";
+                input.placeholder = "Enter true / false";
             } else if (jsonObject.questionType === "MCQ") {
-        giveAnswer.innerHTML =
-            '<button onclick="submitButtonsAnswers(\'A\')">A</button>' +
-            '<button onclick="submitButtonsAnswers(\'B\')">B</button>' +
-            '<button onclick="submitButtonsAnswers(\'C\')">C</button>' +
-            '<button onclick="submitButtonsAnswers(\'D\')">D</button>';
-        return;
+                input.type = "text";
+                input.placeholder = "Enter A / B / C / D";
             } else {
                 input.type = "text";
                 input.placeholder = "Enter your answer";
@@ -138,33 +129,17 @@ function getQuestions() {
             }
 
             input.addEventListener("keydown", (e) => {
-                if (e.key === "Enter")
-                    submitAnswers();
+                if (e.key === "Enter") submitAnswers();
             });
 
             showPlayerScore();
         })
         .catch(() => setFeedback("Network error while loading question.", false));
 }
-function submitButtonsAnswers(answer) {
-    pendingAnswer = answer;
-    submitAnswers();
-}
-
 
 function submitAnswers() {
-    // let playersAnswers = document.getElementById("answer").value.trim();
-    const answerInput = document.getElementById("answer");
-    let playersAnswers = "";
-
-    if (pendingAnswer) {
-        playersAnswers = pendingAnswer;
-    } else if (answerInput) {
-        playersAnswers = answerInput.value.trim();
-    }
+    let playersAnswers = document.getElementById("answer").value.trim();
     pendingAnswer = playersAnswers;
-    if (answerInput)
-        answerInput.value = "";
 
     if (!playersAnswers) {
         setFeedback("Please enter an answer.", false);
@@ -189,7 +164,6 @@ function submitAnswers() {
             if (jsonObject.correct === true) setFeedback("Correct ✅", true);
             else if (jsonObject.correct === false) setFeedback("Wrong ❌", false);
             else setFeedback(jsonObject.message || "Submitted.", null);
-            pendingAnswer="";
 
             if (jsonObject.completed === false) {
                 setTimeout(getQuestions, 250);
@@ -300,42 +274,42 @@ async function showPosition(position) {
         setFeedback(`Network error: ${err.message}`, false);
     }
 }
-
-let scanner = new Instascan.Scanner({///this need editingg more (gaith)
-    video: document.getElementById("preview")
-});
-
-scanner.addListener('scan', function (content) {
-    document.getElementById("content").textContent = content;
-    setFeedback("QR code scanned.", true);
-});
-
-document.getElementById("cameraToggle").addEventListener("change", function () {
-    if (this.checked) {
-        Instascan.Camera.getCameras().then(function (cameras) {
-            if (cameras.length > 0) {
-                scanner.start(cameras[0]);
-            } else {
-                setFeedback("No camera found.", false);
-                document.getElementById("cameraToggle").checked = false;
-            }
-        }).catch(function () {
-            setFeedback("Could not open camera.", false);
-            document.getElementById("cameraToggle").checked = false;
-        });
-    } else {
-        scanner.stop();
-        document.getElementById("preview").srcObject = null;
-    }
-});
-
-getQuestions();
-showPlayerScore();
-
 </script>
 
 
+// QR code reader
+var opts = {
+    continuous: true,
+    video: document.getElementById('preview'),
+    mirror: true,
+    captureImage: false,
+    backgroundScan: true,
+    refractoryPeriod: 5000,
+    scanPeriod: 1
+};
 
+let scanner = new Instascan.Scanner(opts);
+scanner.addListener('scan', function (content) {
+    document.getElementById("content").innerHTML = content;
+    setFeedback("Hint scanned ✅", true);
+});
+
+Instascan.Camera.getCameras().then(function (cameras) {
+    if (cameras.length === 0) {
+        document.getElementById("content").innerHTML = "No cameras found.";
+        return;
+    }
+    cameraArray = cameras;
+    cameraIndex = cameras.length - 1;
+    scanner.start(cameraArray[cameraIndex]);
+}).catch(function (e) {
+    document.getElementById("content").innerHTML = "Camera error: " + e;
+});
+
+// start
+getQuestions();
+showPlayerScore();
+</script>
 
 <footer id="footer"></footer>
 </body>
