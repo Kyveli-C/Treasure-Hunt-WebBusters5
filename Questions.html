@@ -54,7 +54,16 @@ let cameraIndex = 0;
 
 function setFeedback(msg, ok = null) {
     const fb = document.getElementById("feedback_text");
-    fb.textContent = msg || "";
+
+    //TODO - Simplify this code
+
+    // fb.textContent = msg || "";
+    if (msg == null) {
+        fb.textContent = "";
+    }
+    else {
+        fb.textContent = msg;
+    }
 
     if (ok === true) fb.style.color = "#118a3b";
     else if (ok === false) fb.style.color = "#c0392b";
@@ -66,9 +75,11 @@ function showPlayerScore() {
         .then(response => response.json())
         .then(jsonObject => {
             const score = document.getElementById('score_container');
-            score.textContent = (typeof jsonObject.score === "undefined") ? "-" : jsonObject.score;
+            score.textContent = (typeof jsonObject.score === "undefined") ? "-" : jsonObject.score; //TODO
         })
-        .catch(() => {});
+        .catch(() => {
+            //TODO
+        });
 }
 
 function getQuestions() {
@@ -216,7 +227,7 @@ function skipQuestion() {
 
 // Keep location flow simple and close to original<script>
 function getCurrentPositionAsync(options) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => { //TODO
         navigator.geolocation.getCurrentPosition(resolve, reject, options);
     });
 }
@@ -234,6 +245,7 @@ async function sendLocationAndAnswerQuestion() {
 
     setFeedback("Location required, getting your location...", null);
 
+    //TODO - Change
     try {
         const position = await getCurrentPositionAsync({
             enableHighAccuracy: false,
@@ -264,7 +276,7 @@ async function showPosition(position) {
 
         const locRes = await fetch(
             `https://codecyprus.org/th/api/location?session=${encodeURIComponent(session)}&latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lng)}`,
-            { cache: "no-store" }
+            { cache: "no-store" } //TODO
         );
         if (!locRes.ok) throw new Error(`Location HTTP ${locRes.status}`);
 
@@ -280,7 +292,7 @@ async function showPosition(position) {
             `https://codecyprus.org/th/api/answer?session=${encodeURIComponent(session)}&answer=${encodeURIComponent(pendingAnswer)}`,
             { cache: "no-store" }
         );
-        if (!ansRes.ok) throw new Error(`Answer HTTP ${ansRes.status}`);
+        if (!ansRes.ok) throw new Error(`Answer HTTP ${ansRes.status}`); //TODO
 
         const ans = await ansRes.json();
         if (ans.status !== "OK") {
