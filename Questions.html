@@ -148,6 +148,7 @@ function getQuestions() {
                 setFeedback("This question cannot be skipped.", null);
             }
 
+            //TODO-remove
             input.addEventListener("keydown", (e) => {
                 if (e.key === "Enter")
                     submitAnswers();
@@ -187,7 +188,7 @@ function submitAnswers() {
         sendLocationAndAnswerQuestion();
         return;
     }
-
+//TODO- remove anything with encodeURIcomponent-we haven't learned this"
     fetch(`https://codecyprus.org/th/api/answer?session=${session}&answer=${encodeURIComponent(playersAnswers)}`)
         .then(response => response.json())
         .then(jsonObject => {
