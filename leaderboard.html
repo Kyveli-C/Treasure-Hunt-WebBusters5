@@ -51,11 +51,15 @@ else {
     showLeaderBoard();
 }
 
-// Refresh button functionality //TODO
 document.getElementById("refreshBtn").addEventListener("click", function () {
     if (session) {
         showPlayerScore();
         showLeaderBoard();
+    } else {
+        document.getElementById("score_container").innerHTML =
+            "No active session found. Please start a game first.";
+        document.getElementById("leaderBoard_container").innerHTML =
+            "Leaderboard unavailable without an active session.";
     }
 });
 
