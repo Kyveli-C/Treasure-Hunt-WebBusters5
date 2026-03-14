@@ -67,17 +67,13 @@ function setFeedback(msg, ok = null) {
 
     //TODO - Simplify this code
 
-    // fb.textContent = msg || "";
-    if (msg == null) {
-        fb.textContent = "";
-    }
-    else {
-        fb.textContent = msg;
-    }
+    // Simplified  code
+    function setFeedback(msg, ok = null) {
+    const fb = document.getElementById("feedback_text");
+    
+    fb.textContent = msg || "";  
+    fb.style.color = ok === true ? "#118a3b" : ok === false ? "#c0392b" : "#111"; 
 
-    if (ok === true) fb.style.color = "#118a3b";
-    else if (ok === false) fb.style.color = "#c0392b";
-    else fb.style.color = "#111";
 }
 
 function showPlayerScore() {
