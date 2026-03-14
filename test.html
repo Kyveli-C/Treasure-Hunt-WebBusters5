@@ -474,7 +474,30 @@
 
         testResultsTable.innerHTML += html;
     }
-    getPlayerScore()
+    getPlayerScore();
+
+    function showQuestions(question) {
+        console.log("Question type:", question.questionType);
+        console.log("Can be skipped:", question.canBeSkipped);
+        console.log("Requires location:", question.requiresLocation);
+        console.log("Total number of questions:", question.numOfQuestions);
+        console.log("Current question index:", question.currentQuestionIndex);
+        console.log("Score if correct:", question.correctScore);
+        console.log("Score if wrong:", question.wrongScore);
+        console.log("Score if skipped:", question.skipScore);
+    }
+
+    fetch("https://codecyprus.org/th/test-api/question")
+        .then(response => response.json())
+        .then(json => {
+            if (json.status === "OK") {
+                showQuestions(json);
+            }
+            else{
+                console.log("Error loading Question");
+            }
+
+        });
 
 </script>
 
