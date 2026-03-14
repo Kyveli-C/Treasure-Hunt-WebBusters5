@@ -277,9 +277,12 @@ async function showPosition(position) {
 
         const locRes = await fetch(
             `https://codecyprus.org/th/api/location?session=${encodeURIComponent(session)}&latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lng)}`,
-            { cache: "no-store" } //TODO
+             //TODO deleting cache
         );
-        if (!locRes.ok) throw new Error(`Location HTTP ${locRes.status}`);
+        if (!locRes.ok) {  // Instead of throw new
+            setFeedback("Location unavailable.", false);
+            return;
+        }
 
         const locJson = await locRes.json();
         if (locJson.status !== "OK") {
@@ -293,7 +296,10 @@ async function showPosition(position) {
             `https://codecyprus.org/th/api/answer?session=${encodeURIComponent(session)}&answer=${encodeURIComponent(pendingAnswer)}`,
             { cache: "no-store" }
         );
-        if (!ansRes.ok) throw new Error(`Answer HTTP ${ansRes.status}`); //TODO
+        if (!ansRes.ok) {
+            setFeedback("Error sending answer.", false);
+            return;
+        } //TODO instead of throw new
 
         const ans = await ansRes.json();
         if (ans.status !== "OK") {
