@@ -80,13 +80,13 @@ function showPlayerScore() {
     fetch(`https://codecyprus.org/th/api/score?session=${session}`)
         .then(response => response.json())
         .then(jsonObject => {
-            const score = document.getElementById('score_container');
-            score.textContent = (typeof jsonObject.score === "undefined") ? "-" : jsonObject.score; //TODO
+            const score = jsonObject.score ?? "-"; 
+            document.getElementById('score_container').textContent = score;
         })
-        .catch(() => {
-            //TODO
-        });
+        .catch(() => setFeedback("Error retrieving score.", false));
 }
+
+
 
 function getQuestions() {
     fetch(`https://codecyprus.org/th/api/question?session=${session}`)
