@@ -62,36 +62,49 @@ let pendingAnswer = "";
 let cameraArray = [];
 let cameraIndex = 0;
 
-function setFeedback(msg, ok = null) {
-    const fb = document.getElementById("feedback_text");
+function setFeedback(msg, ok) {
+    let fb = document.getElementById("feedback_text");
 
-    //TODO - Simplify this code
+    if (msg == null) {
+        fb.textContent = "";
+    } else {
+        fb.textContent = msg;
+    }
 
-    // Simplified  code
-    function setFeedback(msg, ok = null) {
-    const fb = document.getElementById("feedback_text");
-    
-    fb.textContent = msg || "";  
-    fb.style.color = ok === true ? "#118a3b" : ok === false ? "#c0392b" : "#111"; 
-
+    if (ok === true) {
+        fb.style.color = "#118a3b";
+    } else if (ok === false) {
+        fb.style.color = "#c0392b";
+    } else {
+        fb.style.color = "#111";
+    }
 }
 
 function showPlayerScore() {
-    fetch(`https://codecyprus.org/th/api/score?session=${session}`)
-        .then(response => response.json())
-        .then(jsonObject => {
-            const score = jsonObject.score ?? "-"; 
-            document.getElementById('score_container').textContent = score;
+    fetch("https://codecyprus.org/th/api/score?session=" + session)
+        .then(function (response) {
+            return response.json();
         })
-        .catch(() => setFeedback("Error retrieving score.", false));
+        .then(function (jsonObject) {
+            let score = document.getElementById("score_container");
+
+            if (typeof jsonObject.score === "undefined") {
+                score.textContent = "-";
+            } else {
+                score.textContent = jsonObject.score;
+            }
+        })
+        .catch(function () {
+            setFeedback("Error retrieving score.", false);
+        });
 }
 
-
-
 function getQuestions() {
-    fetch(`https://codecyprus.org/th/api/question?session=${session}`)
-        .then(response => response.json())
-        .then(jsonObject => {
+    fetch("https://codecyprus.org/th/api/question?session=" + session)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (jsonObject) {
             requiresLocationQuestion = (jsonObject.requiresLocation === true);
             locationSentQuestion = false;
 
@@ -109,40 +122,44 @@ function getQuestions() {
 
             displayQuestion.innerHTML = (jsonObject.questionText || "").split("<br>")[0].trim();
 
-            const input = document.createElement("input");
-            input.id = "answer";
-
-            // Keep MCQ as TEXT input because API often expects A/B/C/D manually
-            if (jsonObject.questionType === "INTEGER" || jsonObject.questionType === "NUMERIC") {
-                input.type = "number";
-                input.placeholder = "Enter your answer";
-            } else if (jsonObject.questionType === "BOOLEAN") {
-                giveAnswer.innerHTML=
+            if (jsonObject.questionType === "BOOLEAN") {
+                giveAnswer.innerHTML =
                     '<button onclick="submitButtonsAnswers(\'true\')">True</button>' +
                     '<button onclick="submitButtonsAnswers(\'false\')">False</button>';
+                showPlayerScore();
                 return;
-            } else if (jsonObject.questionType === "MCQ") {
-        giveAnswer.innerHTML =
-            '<button onclick="submitButtonsAnswers(\'A\')">A</button>' +
-            '<button onclick="submitButtonsAnswers(\'B\')">B</button>' +
-            '<button onclick="submitButtonsAnswers(\'C\')">C</button>' +
-            '<button onclick="submitButtonsAnswers(\'D\')">D</button>';
-        return;
-            } else {
-                input.type = "text";
-                input.placeholder = "Enter your answer";
             }
 
+            if (jsonObject.questionType === "MCQ") {
+                giveAnswer.innerHTML =
+                    '<button onclick="submitButtonsAnswers(\'A\')">A</button>' +
+                    '<button onclick="submitButtonsAnswers(\'B\')">B</button>' +
+                    '<button onclick="submitButtonsAnswers(\'C\')">C</button>' +
+                    '<button onclick="submitButtonsAnswers(\'D\')">D</button>';
+                showPlayerScore();
+                return;
+            }
+
+            let input = document.createElement("input");
+            input.id = "answer";
+
+            if (jsonObject.questionType === "INTEGER" || jsonObject.questionType === "NUMERIC") {
+                input.type = "number";
+            } else {
+                input.type = "text";
+            }
+
+            input.placeholder = "Enter your answer";
             giveAnswer.appendChild(input);
 
-            const submitButton = document.createElement("button");
+            let submitButton = document.createElement("button");
             submitButton.textContent = "Check";
             submitButton.id = "submit";
             submitButton.type = "button";
             submitButton.onclick = submitAnswers;
             giveAnswer.appendChild(submitButton);
 
-            const skipButton = document.createElement("button");
+            let skipButton = document.createElement("button");
             skipButton.textContent = "Skip Question";
             skipButton.type = "button";
             skipButton.onclick = skipQuestion;
@@ -156,17 +173,18 @@ function getQuestions() {
 
             showPlayerScore();
         })
-        .catch(() => setFeedback("Network error while loading question.", false));
+        .catch(function () {
+            setFeedback("Network error while loading question.", false);
+        });
 }
+
 function submitButtonsAnswers(answer) {
     pendingAnswer = answer;
     submitAnswers();
 }
 
-
 function submitAnswers() {
-    // let playersAnswers = document.getElementById("answer").value.trim();
-    const answerInput = document.getElementById("answer");
+    let answerInput = document.getElementById("answer");
     let playersAnswers = "";
 
     if (pendingAnswer) {
@@ -174,16 +192,18 @@ function submitAnswers() {
     } else if (answerInput) {
         playersAnswers = answerInput.value.trim();
     }
+
     pendingAnswer = playersAnswers;
-    if (answerInput)
+
+    if (answerInput) {
         answerInput.value = "";
+    }
 
     if (!playersAnswers) {
         setFeedback("Please enter an answer.", false);
         return;
     }
 
-    // Old working flow: if location needed, do location first
     if (requiresLocationQuestion && !locationSentQuestion) {
         sendLocationAndAnswerQuestion();
         return;
@@ -217,155 +237,154 @@ function submitAnswers() {
 
             setTimeout(showPlayerScore, 350);
         })
-
         .catch(function () {
             setFeedback("Network error while submitting answer.", false);
-        });}
+        });
+}
 
+function skipQuestion() {
+    fetch("https://codecyprus.org/th/api/skip?session=" + session)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function () {
+            getQuestions();
+            setTimeout(showPlayerScore, 300);
+        })
+        .catch(function () {
+            setFeedback("Network error while skipping.", false);
+        });
+}
 
-    function skipQuestion() {
-        fetch(`https://codecyprus.org/th/api/skip?session=${session}`)
-            .then(response => response.json())
-            .then(() => {
-                getQuestions();
-                setTimeout(showPlayerScore, 300);
-            })
-            .catch(() => setFeedback("Network error while skipping.", false));
-    }
-    function sendLocationAndAnswerQuestion() {
-        if (!navigator.geolocation) {
-            setFeedback("Geolocation is not supported by your browser.", false);
-            return;
-        }
-
-        if (!pendingAnswer) {
-            setFeedback("Please enter an answer first.", false);
-            return;
-        }
-
-        setFeedback("Location required, getting your location...", null);
-
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                showPosition(position);
-            },
-            function (error) {
-                if (error.code === 1) setFeedback("Location failed: Permission denied.", false);
-                else if (error.code === 2) setFeedback("Location failed: Position unavailable.", false);
-                else if (error.code === 3) setFeedback("Location failed: Request timed out.", false);
-                else setFeedback("Location failed: Unknown error.", false);
-            },
-            { enableHighAccuracy: false, timeout: 10000, maximumAge: 30000 }
-        );
+function sendLocationAndAnswerQuestion() {
+    if (!navigator.geolocation) {
+        setFeedback("Geolocation is not supported by your browser.", false);
+        return;
     }
 
-    function showPosition(position) {
-        var lat = position.coords.latitude;
-        var lng = position.coords.longitude;
+    if (!pendingAnswer) {
+        setFeedback("Please enter an answer first.", false);
+        return;
+    }
 
-        if (lat == null || lng == null) {
-            setFeedback("Invalid location.", false);
-            return;
-        }
+    setFeedback("Location required, getting your location...", null);
 
+    navigator.geolocation.getCurrentPosition(
+        function (position) {
+            showPosition(position);
+        },
+        function (error) {
+            if (error.code === 1) {
+                setFeedback("Location failed: Permission denied.", false);
+            } else if (error.code === 2) {
+                setFeedback("Location failed: Position unavailable.", false);
+            } else if (error.code === 3) {
+                setFeedback("Location failed: Request timed out.", false);
+            } else {
+                setFeedback("Location failed: Unknown error.", false);
+            }
+        },
+        { enableHighAccuracy: false, timeout: 10000, maximumAge: 30000 }
+    );
+}
 
-        var locationUrl =
-            "https://codecyprus.org/th/api/location?session=" + session +
-            "&latitude=" + lat +
-            "&longitude=" + lng;
+function showPosition(position) {
+    let lat = position.coords.latitude;
+    let lng = position.coords.longitude;
 
-        fetch(locationUrl)
-            .then(function (response) {
-                if (!response.ok) {
-                    setFeedback("Location unavailable.", false);
-                    return null;
-                }
-                return response.json();
-            })
-            .then(function (locJson) {
-                if (!locJson) return;
+    if (lat == null || lng == null) {
+        setFeedback("Invalid location.", false);
+        return;
+    }
 
-                if (locJson.status !== "OK") {
-                    setFeedback(locJson.message || "Location rejected.", false);
-                    return;
-                }
+    let locationUrl =
+        "https://codecyprus.org/th/api/location?session=" + session +
+        "&latitude=" + lat +
+        "&longitude=" + lng;
 
-                locationSentQuestion = true;
+    fetch(locationUrl)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (locJson) {
+            if (locJson.status !== "OK") {
+                setFeedback(locJson.message || "Location rejected.", false);
+                return null;
+            }
 
-                var answerUrl =
-                    "https://codecyprus.org/th/api/answer?session=" + session +
-                    "&answer=" + pendingAnswer;
+            locationSentQuestion = true;
 
-                return fetch(answerUrl);
-            })
-            .then(function (response) {
-                if (!response) return null;
+            return fetch("https://codecyprus.org/th/api/answer?session=" + session + "&answer=" + pendingAnswer);
+        })
+        .then(function (response) {
+            if (!response) {
+                return null;
+            }
+            return response.json();
+        })
+        .then(function (ans) {
+            if (!ans) {
+                return;
+            }
 
-                if (!response.ok) {
-                    setFeedback("Error sending answer.", false);
-                    return null;
-                }
+            if (ans.status !== "OK") {
+                setFeedback(ans.message || "Answer submission failed.", false);
+                return;
+            }
 
-                return response.json();
-            })
-            .then(function (ans) {
-                if (!ans) return;
+            if (ans.correct === true) {
+                setFeedback("Correct", true);
+            } else if (ans.correct === false) {
+                setFeedback("Wrong", false);
+            } else {
+                setFeedback(ans.message || "Submitted.", null);
+            }
 
-                if (ans.status !== "OK") {
-                    setFeedback(ans.message || "Answer submission failed.", false);
-                }
+            pendingAnswer = "";
 
-                // success handling continues here
-                // (correct/wrong message, next question, score, etc.)
-            })
-            .catch(function () {
-                setFeedback("Network error.", false);
-            });
-
-
-        if (ans.correct === true) setFeedback("Correct ✅", true);
-            else if (ans.correct === false) setFeedback("Wrong ❌", false);
-            else setFeedback(ans.message || "Submitted.", null);
-
-            if (ans.completed === false) setTimeout(getQuestions, 250);
-            else window.location.href = "leaderboard.html";
+            if (ans.completed === false) {
+                setTimeout(getQuestions, 250);
+            } else {
+                window.location.href = "leaderboard.html";
+            }
 
             setTimeout(showPlayerScore, 350);
-        }
+        })
+        .catch(function () {
+            setFeedback("Network error.", false);
+        });
+}
 
+let scanner = new Instascan.Scanner({
+    video: document.getElementById("preview")
+});
 
-    let scanner = new Instascan.Scanner({///this need editingg more (gaith)
-        video: document.getElementById("preview")
-    });
+scanner.addListener("scan", function (content) {
+    document.getElementById("content").textContent = content;
+    setFeedback("QR code scanned.", true);
+});
 
-    scanner.addListener('scan', function (content) {
-        document.getElementById("content").textContent = content;
-        setFeedback("QR code scanned.", true);
-    });
-
-    document.getElementById("cameraToggle").addEventListener("change", function () {
-        if (this.checked) {
-            Instascan.Camera.getCameras().then(function (cameras) {
-                if (cameras.length > 0) {
-                    scanner.start(cameras[0]);
-                } else {
-                    setFeedback("No camera found.", false);
-                    document.getElementById("cameraToggle").checked = false;
-                }
-            }).catch(function () {
-                setFeedback("Could not open camera.", false);
+document.getElementById("cameraToggle").addEventListener("change", function () {
+    if (this.checked) {
+        Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+            } else {
+                setFeedback("No camera found.", false);
                 document.getElementById("cameraToggle").checked = false;
-            });
-        } else {
-            scanner.stop();
-            document.getElementById("preview").srcObject = null;
-        }
-    });
+            }
+        }).catch(function () {
+            setFeedback("Could not open camera.", false);
+            document.getElementById("cameraToggle").checked = false;
+        });
+    } else {
+        scanner.stop();
+        document.getElementById("preview").srcObject = null;
+    }
+});
 
-    getQuestions();
-    showPlayerScore();
-
-
+getQuestions();
+showPlayerScore();
 </script>
 <footer id="footer"></footer>
 </body>
