@@ -154,12 +154,6 @@ function getQuestions() {
                 setFeedback("This question cannot be skipped.", null);
             }
 
-            //TODO-remove
-            input.addEventListener("keydown", (e) => {
-                if (e.key === "Enter")
-                    submitAnswers();
-            });
-
             showPlayerScore();
         })
         .catch(() => setFeedback("Network error while loading question.", false));
