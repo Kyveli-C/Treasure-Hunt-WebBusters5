@@ -236,11 +236,13 @@ function skipQuestion() {
         .catch(() => setFeedback("Network error while skipping.", false));
 }
 
-// Keep location flow simple and close to original<script>
-function getCurrentPositionAsync(options) {
-    return new Promise((resolve, reject) => { //TODO
-        navigator.geolocation.getCurrentPosition(resolve, reject, options);
-    });
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(success, error);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
 }
 
 async function sendLocationAndAnswerQuestion() {
