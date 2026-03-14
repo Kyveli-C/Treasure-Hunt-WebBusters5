@@ -198,20 +198,26 @@ function submitAnswers() {
         sendLocationAndAnswerQuestion();
         return;
     }
-//TODO- remove anything with encodeURIcomponent-we haven't learned this"
-    fetch(`https://codecyprus.org/th/api/answer?session=${session}&answer=${encodeURIComponent(playersAnswers)}`)
-        .then(response => response.json())
-        .then(jsonObject => {
 
+    fetch("https://codecyprus.org/th/api/answer?session=" + session + "&answer=" + playersAnswers)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (jsonObject) {
             if (jsonObject.status !== "OK") {
                 setFeedback(jsonObject.message || "Answer submission failed.", false);
                 return;
             }
 
-            if (jsonObject.correct === true) setFeedback("Correct ✅", true);
-            else if (jsonObject.correct === false) setFeedback("Wrong ❌", false);
-            else setFeedback(jsonObject.message || "Submitted.", null);
-            pendingAnswer="";
+            if (jsonObject.correct === true) {
+                setFeedback("Correct", true);
+            } else if (jsonObject.correct === false) {
+                setFeedback("Wrong", false);
+            } else {
+                setFeedback(jsonObject.message || "Submitted.", null);
+            }
+
+            pendingAnswer = "";
 
             if (jsonObject.completed === false) {
                 setTimeout(getQuestions, 250);
@@ -221,147 +227,142 @@ function submitAnswers() {
 
             setTimeout(showPlayerScore, 350);
         })
-        .catch(() => {
+        .catch(function () {
             setFeedback("Network error while submitting answer.", false);
         });
-}
-
-function skipQuestion() {
-    fetch(`https://codecyprus.org/th/api/skip?session=${session}`)
-        .then(response => response.json())
-        .then(() => {
-            getQuestions();
-            setTimeout(showPlayerScore, 300);
-        })
-        .catch(() => setFeedback("Network error while skipping.", false));
-}
 
 
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(success, error);
-    } else {
-        x.innerHTML = "Geolocation is not supported by this browser.";
-    }
-}
-
-async function sendLocationAndAnswerQuestion() {
-    if (!navigator.geolocation) {
-        setFeedback("Geolocation is not supported by your browser.", false);
-        return;
+    function skipQuestion() {
+        fetch(`https://codecyprus.org/th/api/skip?session=${session}`)
+            .then(response => response.json())
+            .then(() => {
+                getQuestions();
+                setTimeout(showPlayerScore, 300);
+            })
+            .catch(() => setFeedback("Network error while skipping.", false));
     }
 
-    if (!pendingAnswer) {
-        setFeedback("Please enter an answer first.", false);
-        return;
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(success, error);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
     }
 
-    setFeedback("Location required, getting your location...", null);
-
-    //TODO - Change
-    try {
-        const position = await getCurrentPositionAsync({
-            enableHighAccuracy: false,
-            timeout: 10000,
-            maximumAge: 30000
-        });
-
-        await showPosition(position);
-    } catch (err) {
-        const msg =
-            err?.code === 1 ? "Permission denied." :
-                err?.code === 2 ? "Position unavailable." :
-                    err?.code === 3 ? "Request timed out." :
-                        (err?.message || "Unknown error.");
-        setFeedback(`Location failed: ${msg}`, false);
-    }
-}
-
-async function showPosition(position) {
-    try {
-        const lat = position?.coords?.latitude;
-        const lng = position?.coords?.longitude;
-
-        if (typeof lat !== "number" || typeof lng !== "number") {
-            setFeedback("Invalid location coordinates.", false);
+    async function sendLocationAndAnswerQuestion() {
+        if (!navigator.geolocation) {
+            setFeedback("Geolocation is not supported by your browser.", false);
             return;
         }
 
-        const locRes = await fetch(
-            `https://codecyprus.org/th/api/location?session=${encodeURIComponent(session)}&latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lng)}`,
-             //TODO deleting cache
-        );
-        if (!locRes.ok) {  // Instead of throw new
-            setFeedback("Location unavailable.", false);
+        if (!pendingAnswer) {
+            setFeedback("Please enter an answer first.", false);
             return;
         }
 
-        const locJson = await locRes.json();
-        if (locJson.status !== "OK") {
-            setFeedback(locJson.message || "Location rejected.", false);
-            return;
-        }
+        setFeedback("Getting location...", null);
 
-        locationSentQuestion = true;
-
-        const ansRes = await fetch(
-            `https://codecyprus.org/th/api/answer?session=${encodeURIComponent(session)}&answer=${encodeURIComponent(pendingAnswer)}`,
-            { cache: "no-store" }
-        );
-        if (!ansRes.ok) {
-            setFeedback("Error sending answer.", false);
-            return;
-        } //TODO instead of throw new
-
-        const ans = await ansRes.json();
-        if (ans.status !== "OK") {
-            setFeedback(ans.message || "Answer submission failed.", false);
-            return;
-        }
-
-        if (ans.correct === true) setFeedback("Correct ✅", true);
-        else if (ans.correct === false) setFeedback("Wrong ❌", false);
-        else setFeedback(ans.message || "Submitted.", null);
-
-        if (ans.completed === false) setTimeout(getQuestions, 250);
-        else window.location.href = "leaderboard.html";
-
-        setTimeout(showPlayerScore, 350);
-    } catch (err) {
-        setFeedback(`Network error: ${err.message}`, false);
-    }
-}
-
-let scanner = new Instascan.Scanner({///this need editingg more (gaith)
-    video: document.getElementById("preview")
-});
-
-scanner.addListener('scan', function (content) {
-    document.getElementById("content").textContent = content;
-    setFeedback("QR code scanned.", true);
-});
-
-document.getElementById("cameraToggle").addEventListener("change", function () {
-    if (this.checked) {
-        Instascan.Camera.getCameras().then(function (cameras) {
-            if (cameras.length > 0) {
-                scanner.start(cameras[0]);
-            } else {
-                setFeedback("No camera found.", false);
-                document.getElementById("cameraToggle").checked = false;
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                showPosition(position);
+            },
+            function (error) {
+                if (error.code === 1) setFeedback("Location failed: Permission denied.", false);
+                else if (error.code === 2) setFeedback("Location failed: Position unavailable.", false);
+                else if (error.code === 3) setFeedback("Location failed: Timeout.", false);
+                else setFeedback("Location failed.", false);
             }
-        }).catch(function () {
-            setFeedback("Could not open camera.", false);
-            document.getElementById("cameraToggle").checked = false;
-        });
-    } else {
-        scanner.stop();
-        document.getElementById("preview").srcObject = null;
+        );
     }
-});
 
-getQuestions();
-showPlayerScore();
+        async function showPosition(position) {
+        try {
+            const lat = position?.coords?.latitude;
+            const lng = position?.coords?.longitude;
+
+            if (typeof lat !== "number" || typeof lng !== "number") {
+                setFeedback("Invalid location coordinates.", false);
+                return;
+            }
+
+            const locRes = await fetch(
+                `https://codecyprus.org/th/api/location?session=${encodeURIComponent(session)}&latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lng)}`,
+                //TODO deleting cache
+            );
+            if (!locRes.ok) {  // Instead of throw new
+                setFeedback("Location unavailable.", false);
+                return;
+            }
+
+            const locJson = await locRes.json();
+            if (locJson.status !== "OK") {
+                setFeedback(locJson.message || "Location rejected.", false);
+                return;
+            }
+
+            locationSentQuestion = true;
+
+            const ansRes = await fetch(
+                `https://codecyprus.org/th/api/answer?session=${encodeURIComponent(session)}&answer=${encodeURIComponent(pendingAnswer)}`,
+                {cache: "no-store"}
+            );
+            if (!ansRes.ok) {
+                setFeedback("Error sending answer.", false);
+                return;
+            } //TODO instead of throw new
+
+            const ans = await ansRes.json();
+            if (ans.status !== "OK") {
+                setFeedback(ans.message || "Answer submission failed.", false);
+                return;
+            }
+
+            if (ans.correct === true) setFeedback("Correct ✅", true);
+            else if (ans.correct === false) setFeedback("Wrong ❌", false);
+            else setFeedback(ans.message || "Submitted.", null);
+
+            if (ans.completed === false) setTimeout(getQuestions, 250);
+            else window.location.href = "leaderboard.html";
+
+            setTimeout(showPlayerScore, 350);
+        } catch (err) {
+            setFeedback(`Network error: ${err.message}`, false);
+        }
+    }
+
+    let scanner = new Instascan.Scanner({///this need editingg more (gaith)
+        video: document.getElementById("preview")
+    });
+
+    scanner.addListener('scan', function (content) {
+        document.getElementById("content").textContent = content;
+        setFeedback("QR code scanned.", true);
+    });
+
+    document.getElementById("cameraToggle").addEventListener("change", function () {
+        if (this.checked) {
+            Instascan.Camera.getCameras().then(function (cameras) {
+                if (cameras.length > 0) {
+                    scanner.start(cameras[0]);
+                } else {
+                    setFeedback("No camera found.", false);
+                    document.getElementById("cameraToggle").checked = false;
+                }
+            }).catch(function () {
+                setFeedback("Could not open camera.", false);
+                document.getElementById("cameraToggle").checked = false;
+            });
+        } else {
+            scanner.stop();
+            document.getElementById("preview").srcObject = null;
+        }
+    });}
+
+    getQuestions();
+    showPlayerScore();
+
 
 </script>
 
