@@ -35,11 +35,13 @@
 </div>
 <label class="switch">
     <input type="checkbox" id="cameraToggle">
-    <br>
-    <br>
+
     <button id="switchCameras" onclick="switchCamera()">Switch Camera</button>
     <span class="slider round"></span>
 </label>
+<div class="camera-container">
+    <video id="preview" autoplay muted playsinline></video>
+</div>
 <div class="main-layout">
     <div class="question-card">
         <h1>Treasure Hunt Questions</h1>
@@ -57,9 +59,7 @@
         <p id="feedback_text" class="feedback" style="color:yellow; font-weight:600;"></p>
     </div>
 
-    <div class="camera-container">
-        <video id="preview" autoplay muted playsinline></video>
-    </div>
+
 </div>
 
 <script>
