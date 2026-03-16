@@ -27,10 +27,14 @@
 <div id="score_container"></div>
 
 <h1>Leader Board:</h1>
-<div id="leaderBoard_container"></div>
+    <button id="refreshBtn" >Refresh</button>
+    <script>
+        document.getElementById("refreshBtn").onclick = () => location.reload();
+    </script>
+
+    <div id="leaderBoard_container"></div>
 
 <!-- Small UX improvement -->
-<button id="refreshBtn" class="socialBtn">Refresh</button>
 
 </div>
 

@@ -100,14 +100,15 @@ function getQuestions()
         .then(jsonObject => {
             console.log(jsonObject);
 
+
             if (jsonObject.status === "OK")
             {
                 const question = jsonObject.questionText;
-                document.getElementById("question_text").textContent = question;
+                document.getElementById("question_text").innerHTML = question;
             }
             else
             {
-                document.getElementById("question_text").textContent ="No questions found!";
+                document.getElementById("question_text").innerHTML ="No questions found!";
             }
 
 
