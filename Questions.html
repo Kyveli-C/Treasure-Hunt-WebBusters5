@@ -123,7 +123,7 @@ function getQuestions()
                 giveAnswer.innerHTML =
                     '<button onclick="submitButtonsAnswers(\'true\')">True</button>' +
                     '<button onclick="submitButtonsAnswers(\'false\')">False</button>'+
-                '<button onclick="skipQuestion()">Skip Question</button>' ;
+                '<button style="color:black; background:red" onclick="skipQuestion()">Skip Question</button>' ;
 
                 showPlayerScore();
                 return;
@@ -137,8 +137,7 @@ function getQuestions()
                     '<button onclick="submitButtonsAnswers(\'B\')">B</button>' +
                     '<button onclick="submitButtonsAnswers(\'C\')">C</button>' +
                     '<button onclick="submitButtonsAnswers(\'D\')">D</button>'+
-                '<button onclick="skipQuestion()">Skip Question</button>';
-
+                    '<button style="color:black; background:red" onclick="skipQuestion()">Skip Question</button>' ;
                 showPlayerScore();
                 return;
             }
@@ -163,12 +162,15 @@ function getQuestions()
             giveAnswer.appendChild(submitButton);
 
             let skipButton = document.createElement("button");
+
             skipButton.textContent = "Skip Question";
             skipButton.type = "button";
             skipButton.onclick = skipQuestion;
             skipButton.id = "skipButton";
             giveAnswer.appendChild(skipButton);
 
+            skipButton.style.color="black";
+            skipButton.style.background="red";
             if (jsonObject.canBeSkipped === false) {
                 //skipButton.disabled = true;
                 setFeedback("This question cannot be skipped.");
