@@ -44,7 +44,7 @@
         <p id="question_text" class="question-text">Loading question...</p>
         <div id="answer_text" class="answers"></div>
 
-        <p id="feedback_text" class="feedback" style="color:#111; font-weight:600;"></p>
+        <p id="feedback_text" class="feedback" style="color:yellow; font-weight:600;"></p>
     </div>
 
     <div class="camera-container">
@@ -68,13 +68,7 @@ function setFeedback(msg, ok) {
         fb.textContent = msg;
     }
 
-    if (ok === true) {
-        fb.style.color = "#118a3b";
-    } else if (ok === false) {
-        fb.style.color = "#c0392b";
-    } else {
-        fb.style.color = "#111";
-    }
+
 }
 
 function showPlayerScore() {
@@ -117,22 +111,28 @@ function getQuestions() {
                 return;
             }
 
-            displayQuestion.innerHTML = (jsonObject.questionText || "").split("<br>")[0].trim();
+            displayQuestion.innerHTML = (jsonObject.questionText || "");
 
             if (jsonObject.questionType === "BOOLEAN") {
                 giveAnswer.innerHTML =
                     '<button onclick="submitButtonsAnswers(\'true\')">True</button>' +
-                    '<button onclick="submitButtonsAnswers(\'false\')">False</button>';
+                    '<button onclick="submitButtonsAnswers(\'false\')">False</button>'+
+                '<button onclick="skipQuestion()">Skip Question</button>' ;
+
                 showPlayerScore();
                 return;
             }
 
             if (jsonObject.questionType === "MCQ") {
                 giveAnswer.innerHTML =
+
+
                     '<button onclick="submitButtonsAnswers(\'A\')">A</button>' +
                     '<button onclick="submitButtonsAnswers(\'B\')">B</button>' +
                     '<button onclick="submitButtonsAnswers(\'C\')">C</button>' +
-                    '<button onclick="submitButtonsAnswers(\'D\')">D</button>';
+                    '<button onclick="submitButtonsAnswers(\'D\')">D</button>'+
+                '<button onclick="skipQuestion()">Skip Question</button>';
+
                 showPlayerScore();
                 return;
             }
@@ -164,7 +164,7 @@ function getQuestions() {
             giveAnswer.appendChild(skipButton);
 
             if (jsonObject.canBeSkipped === false) {
-                skipButton.disabled = true;
+                //skipButton.disabled = true;
                 setFeedback("This question cannot be skipped.", null);
             }
 
@@ -182,10 +182,10 @@ function submitButtonsAnswers(answer) {
 
 function submitAnswers() {
     let answerInput = document.getElementById("answer");
-    let playersAnswers = "";
+    let playersAnswers = ""; //clear the previous
 
     if (pendingAnswer) {
-        playersAnswers = pendingAnswer;
+        playersAnswers = pendingAnswer.trim(); //used trim because we used type number- it removes any extra spaces so that API can read the number correctly
     } else if (answerInput) {
         playersAnswers = answerInput.value.trim();
     }
@@ -211,33 +211,33 @@ function submitAnswers() {
             return response.json();
         })
         .then(function (jsonObject) {
+            let feedback=document.getElementById("feedback_text");
+
             if (jsonObject.status !== "OK") {
-                setFeedback(jsonObject.message || "Answer submission failed.", false);
+                feedback.textContent="Answer submission failed";
                 return;
             }
-
-            if (jsonObject.correct === true) {
-                setFeedback("Correct", true);
-            } else if (jsonObject.correct === false) {
-                setFeedback("Wrong", false);
-            } else {
-                setFeedback(jsonObject.message || "Submitted.", null);
+            else
+            {
+                feedback.textContent=jsonObject.message;
             }
 
             pendingAnswer = "";
 
-            if (jsonObject.completed === false) {
-                setTimeout(getQuestions, 250);
+            if(jsonObject.completed===false) {
+                getQuestions();
             } else {
                 window.location.href = "leaderboard.html";
             }
 
             setTimeout(showPlayerScore, 350);
-        })
-        .catch(function () {
-            setFeedback("Network error while submitting answer.", false);
         });
-}
+        // .catch(function () {
+        //     setFeedback("Network error while submitting answer.", false);
+        // )
+
+    }
+//}
 
 function skipQuestion() {
     fetch("https://codecyprus.org/th/api/skip?session=" + session)

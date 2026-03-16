@@ -164,9 +164,7 @@ p{
     transition: 0.7s;
 }
 
-#refreshBtn:hover {
-    transform: rotate(360deg) scale(1.1);
-}
+
 
 .Hunt-box1 {
     background: rgba(0, 0, 0, 0.65);
