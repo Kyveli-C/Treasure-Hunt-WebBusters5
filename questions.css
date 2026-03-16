@@ -253,8 +253,9 @@ input:checked + .slider:before {
 }
 
 #switchCameras{
-    top: 50px;
-    right: 200px;
+    position: fixed;
+    top: 10vh;
+    right: 10vw;
     background: grey;
     color: #1a120b;
     border: none;
