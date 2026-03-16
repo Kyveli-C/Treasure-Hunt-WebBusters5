@@ -28,6 +28,9 @@
 </div>
 <label class="switch">
     <input type="checkbox" id="cameraToggle">
+    <br>
+    <br>
+    <button id="switchCameras" onclick="switchCamera()">Switch Camera</button>
     <span class="slider round"></span>
 </label>
 <div class="main-layout">
@@ -369,24 +372,25 @@ document.getElementById("cameraToggle").addEventListener("change", function () {
         scanner.stop();
         document.getElementById("preview").srcObject = null;
     }
-    function switchCamera() {
-        //Cycle through the available cameras:
-        if (cameraIndex < cameraArray.length - 1) {
-            cameraIndex++;
-        }
-        else {
-            cameraIndex = 0;
 
-        }
-
-        //Find the next camera to use:
-        let camera = cameraArray[cameraIndex];
-
-        //Start the new selected camera:
-        scanner.start(camera);
-    }
 
 });
+function switchCamera() {
+    //Cycle through the available cameras:
+    if (cameraIndex < cameraArray.length - 1) {
+        cameraIndex++;
+    }
+    else {
+        cameraIndex = 0;
+
+    }
+
+    //Find the next camera to use:
+    let camera = cameraArray[cameraIndex];
+
+    //Start the new selected camera:
+    scanner.start(camera);
+}
 
 
 getQuestions();
