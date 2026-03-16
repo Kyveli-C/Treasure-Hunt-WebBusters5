@@ -19,10 +19,17 @@
     <meta name="msapplication-TileImage" content="logo.png">
     <meta name="msapplication-TileColor" content="#008080">
 </head>
+
 <body>
 <header id="header" style="display:flex; align-items:center; justify-content:flex-start; gap:10px; width:100%;">
     <img src="FinalLogo-removebg-preview.png" alt="WebBusters Logo" style="width:120px; height:auto;">
+
 </header>
+
+<button id="refreshBtn" title="Refresh">Refresh</button>
+<script>
+    document.getElementById("refreshBtn").onclick = () => location.reload();
+</script>
 <div style="margin: 20px; padding: 20px; background-color: black; color: white; text-align: center;" id="content">
     Scan a QR code to get a hint...
 </div>
@@ -375,7 +382,11 @@ document.getElementById("cameraToggle").addEventListener("change", function () {
 
 
 });
+
+let cameraArray=[]
+let cameraIndex=0;
 function switchCamera() {
+    scanner.stop();
     //Cycle through the available cameras:
     if (cameraIndex < cameraArray.length - 1) {
         cameraIndex++;
