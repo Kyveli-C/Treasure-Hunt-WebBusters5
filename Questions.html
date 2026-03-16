@@ -373,13 +373,13 @@ document.getElementById("cameraToggle").addEventListener("change", function () {
             cameraArray = cameras;
             if (cameras.length > 0) {
                 scanner.start(cameras[0]);
+                //cameraToggle.checked = true;
             } else {
                 setFeedback("No camera found.");
                 document.getElementById("cameraToggle").checked = false;
             }
         })
-            setFeedback("Could not open camera.");
-            document.getElementById("cameraToggle").checked = false;
+
 
     } else {
         scanner.stop();
