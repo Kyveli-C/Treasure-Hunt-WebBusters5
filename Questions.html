@@ -220,10 +220,11 @@ function submitAnswers() {
 
             pendingAnswer = "";
 
-            if(!jsonObject) {
-                getQuestions();
-            } else {
+            if(jsonObject.completed===true) {
                 window.location.href = "leaderboard.html";
+
+            } else {
+                getQuestions();
             }
 
         });
@@ -232,13 +233,17 @@ function submitAnswers() {
 
 function skipQuestion() {
     fetch("https://codecyprus.org/th/api/skip?session=" + session)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function () {
-            getQuestions();
-        })
+        .then(response => response.json())
+        .then(jsonObject => {
+            console.log(jsonObject);
 
+    if(jsonObject.completed===true) {
+        window.location.href = "leaderboard.html";
+
+    } else {
+        getQuestions();
+    }
+        });
 }
 
 function sendLocationAndAnswerQuestion() {
