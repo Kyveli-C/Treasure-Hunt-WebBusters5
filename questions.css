@@ -251,3 +251,32 @@ input:checked + .slider:before {
         max-width: 460px;
     }
 }
+
+#switchCameras{
+    position: fixed;
+    top: 200px;
+    right: 400px;
+    background: grey;
+    color: #1a120b;
+    border: none;
+    padding: 20px 30px;
+    border-radius: 50%;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+#refreshBtn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #d4af37;
+    color: #1a120b;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 50%;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    transition: 0.7s;
+}
