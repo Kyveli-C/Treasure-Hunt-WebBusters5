@@ -37,7 +37,7 @@
         <div class="question-header">
             <h2>Treasure Hunt Question</h2>
             <div class="score-box">
-                Score: <span id="score_container">0</span>
+                Score: <span id="score_container">0</span> <!--start with 0 points-->
             </div>
         </div>
 
@@ -59,58 +59,55 @@ let requiresLocationQuestion = false;
 let locationSentQuestion = false;
 let pendingAnswer = "";
 
-function setFeedback(msg, ok) {
-    let fb = document.getElementById("feedback_text");
 
-    if (msg == null) {
-        fb.textContent = "";
-    } else {
-        fb.textContent = msg;
-    }
+//function to display a feedback
+function setFeedback(msg) {
+    let feedback=document.getElementById("feedback_text");
 }
 
-function showPlayerScore() {
-    fetch("https://codecyprus.org/th/api/score?session=" + session)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (jsonObject) {
-            let score = document.getElementById("score_container");
+function showPlayerScore()
+{
+    fetch(`https://codecyprus.org/th/api/score?session=${session}`)
+        .then(response => response.json())
+        .then(jsonObject => {
+            console.log(jsonObject);
 
-            if (typeof jsonObject.score === "undefined") {
-                score.textContent = "-";
-            } else {
-                score.textContent = jsonObject.score;
+            let score=document.getElementById('score_container');
+            score.innerHTML=jsonObject.score;
+
+            if(jsonObject.status!="OK")
+            {
+                score.innerHTML="Error Loading Score!";
             }
-        })
-        .catch(function () {
-            setFeedback("Error retrieving score.", false);
+
         });
 }
 
-function getQuestions() {
-    fetch("https://codecyprus.org/th/api/question?session=" + session)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (jsonObject) {
+function getQuestions()
+{
+    fetch(`https://codecyprus.org/th/api/question?session=${session}`)
+        .then(response => response.json())
+        .then(jsonObject => {
+            console.log(jsonObject);
+
+            if (jsonObject.status === "OK")
+            {
+                const question = jsonObject.questionText;
+                document.getElementById("question_text").textContent = question;
+            }
+            else
+            {
+                document.getElementById("question_text").textContent ="No questions found!";
+            }
+
+
             requiresLocationQuestion = (jsonObject.requiresLocation === true);
             locationSentQuestion = false;
 
-            let displayQuestion = document.getElementById("question_text");
-            let giveAnswer = document.getElementById("answer_text");
+             let giveAnswer = document.getElementById("answer_text");
 
             giveAnswer.innerHTML = "";
             setFeedback("");
-
-            if (jsonObject.status !== "OK") {
-                displayQuestion.textContent = "No questions found!";
-                setFeedback("No questions found.", false);
-                return;
-            }
-
-            displayQuestion.innerHTML = (jsonObject.questionText || "");
-
             if (jsonObject.questionType === "BOOLEAN") {
                 giveAnswer.innerHTML =
                     '<button onclick="submitButtonsAnswers(\'true\')">True</button>' +
@@ -163,14 +160,12 @@ function getQuestions() {
 
             if (jsonObject.canBeSkipped === false) {
                 //skipButton.disabled = true;
-                setFeedback("This question cannot be skipped.", null);
+                setFeedback("This question cannot be skipped.");
             }
 
             showPlayerScore();
         })
-        .catch(function () {
-            setFeedback("Network error while loading question.", false);
-        });
+
 }
 
 function submitButtonsAnswers(answer) {
@@ -195,7 +190,8 @@ function submitAnswers() {
     }
 
     if (!playersAnswers) {
-        setFeedback("Please enter an answer.", false);
+       // setFeedback("Please enter an answer.", false);
+        feedback.innerHTML="Please enter an answer";
         return;
     }
 
@@ -222,20 +218,15 @@ function submitAnswers() {
 
             pendingAnswer = "";
 
-            if(jsonObject.completed===false) {
+            if(!jsonObject.completed) {
                 getQuestions();
             } else {
                 window.location.href = "leaderboard.html";
             }
 
-            setTimeout(showPlayerScore, 350);
         });
-        // .catch(function () {
-        //     setFeedback("Network error while submitting answer.", false);
-        // )
-
     }
-//}
+
 
 function skipQuestion() {
     fetch("https://codecyprus.org/th/api/skip?session=" + session)
@@ -244,25 +235,22 @@ function skipQuestion() {
         })
         .then(function () {
             getQuestions();
-            setTimeout(showPlayerScore, 300);
         })
-        .catch(function () {
-            setFeedback("Network error while skipping.", false);
-        });
+
 }
 
 function sendLocationAndAnswerQuestion() {
     if (!navigator.geolocation) {
-        setFeedback("Geolocation is not supported by your browser.", false);
+        setFeedback("Geolocation is not supported by your browser.");
         return;
     }
 
     if (!pendingAnswer) {
-        setFeedback("Please enter an answer first.", false);
+        setFeedback("Please enter an answer first.");
         return;
     }
 
-    setFeedback("Location required, getting your location...", null);
+    setFeedback("Location required, getting your location...");
 
     navigator.geolocation.getCurrentPosition(
         function (position) {
@@ -270,13 +258,13 @@ function sendLocationAndAnswerQuestion() {
         },
         function (error) {
             if (error.code === 1) {
-                setFeedback("Location failed: Permission denied.", false);
+                setFeedback("Location failed: Permission denied.");
             } else if (error.code === 2) {
-                setFeedback("Location failed: Position unavailable.", false);
+                setFeedback("Location failed: Position unavailable.");
             } else if (error.code === 3) {
-                setFeedback("Location failed: Request timed out.", false);
+                setFeedback("Location failed: Request timed out.");
             } else {
-                setFeedback("Location failed: Unknown error.", false);
+                setFeedback("Location failed: Unknown error.");
             }
         },
         { enableHighAccuracy: false, timeout: 10000, maximumAge: 30000 }
@@ -287,8 +275,9 @@ function showPosition(position) {
     let lat = position.coords.latitude;
     let lng = position.coords.longitude;
 
+
     if (lat == null || lng == null) {
-        setFeedback("Invalid location.", false);
+        setFeedback("Invalid location.");
         return;
     }
 
@@ -323,32 +312,28 @@ function showPosition(position) {
             }
 
             if (ans.status !== "OK") {
-                setFeedback(ans.message || "Answer submission failed.", false);
+                setFeedback(ans.message || "Answer submission failed.");
                 return;
-            }
-
-            if (ans.correct === true) {
-                setFeedback("Correct", true);
-            } else if (ans.correct === false) {
-                setFeedback("Wrong", false);
-            } else {
-                setFeedback(ans.message || "Submitted.", null);
             }
 
             pendingAnswer = "";
 
-            if (ans.completed === false) {
-                setTimeout(getQuestions, 250);
-            } else {
-                window.location.href = "leaderboard.html";
-            }
-
-            setTimeout(showPlayerScore, 350);
+          if(ans)
+          {
+              window.location.href="leaderboard.html";
+          }
+          else
+          {
+              getQuestions();
+          }
         })
-        .catch(function () {
-            setFeedback("Network error.", false);
-        });
+
+    // setFeedback("Network error.");
+
 }
+
+//sendLocationAndAnswerQuestion();
+
 
 let scanner = new Instascan.Scanner({
     video: document.getElementById("preview")
@@ -356,7 +341,7 @@ let scanner = new Instascan.Scanner({
 
 scanner.addListener("scan", function (content) {
     document.getElementById("content").textContent = content;
-    setFeedback("QR code scanned.", true);
+    setFeedback("QR code scanned.");
 });
 
 document.getElementById("cameraToggle").addEventListener("change", function () {
@@ -365,18 +350,19 @@ document.getElementById("cameraToggle").addEventListener("change", function () {
             if (cameras.length > 0) {
                 scanner.start(cameras[0]);
             } else {
-                setFeedback("No camera found.", false);
+                setFeedback("No camera found.");
                 document.getElementById("cameraToggle").checked = false;
             }
-        }).catch(function () {
-            setFeedback("Could not open camera.", false);
+        })
+            setFeedback("Could not open camera.");
             document.getElementById("cameraToggle").checked = false;
-        });
+
     } else {
         scanner.stop();
         document.getElementById("preview").srcObject = null;
     }
 });
+
 
 getQuestions();
 showPlayerScore();
