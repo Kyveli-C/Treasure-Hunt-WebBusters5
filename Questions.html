@@ -368,6 +368,22 @@ document.getElementById("cameraToggle").addEventListener("change", function () {
         scanner.stop();
         document.getElementById("preview").srcObject = null;
     }
+    function switchCamera() {
+        //Cycle through the available cameras:
+        if (cameraIndex < cameraArray.length - 1) {
+            cameraIndex++;
+        }
+        else {
+            cameraIndex = 0;
+        }
+
+        //Find the next camera to use:
+        let camera = cameraArray[cameraIndex];
+
+        //Start the new selected camera:
+        scanner.start(camera);
+    }
+
 });
 
 
