@@ -354,6 +354,7 @@ scanner.addListener("scan", function (content) {
 document.getElementById("cameraToggle").addEventListener("change", function () {
     if (this.checked) {
         Instascan.Camera.getCameras().then(function (cameras) {
+            cameraArray = cameras;
             if (cameras.length > 0) {
                 scanner.start(cameras[0]);
             } else {
