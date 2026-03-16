@@ -173,7 +173,7 @@ function getQuestions()
             skipButton.style.background="red";
             if (jsonObject.canBeSkipped === false) {
                 //skipButton.disabled = true;
-                setFeedback("This question cannot be skipped.");
+                alert("This question cannot be skipped.");
             }
 
             showPlayerScore();
