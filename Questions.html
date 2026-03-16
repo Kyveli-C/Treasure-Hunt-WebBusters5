@@ -198,6 +198,7 @@ function submitAnswers() {
     if (requiresLocationQuestion && !locationSentQuestion) {
         sendLocationAndAnswerQuestion();
         return;
+
     }
 
     fetch("https://codecyprus.org/th/api/answer?session=" + session + "&answer=" + playersAnswers)
