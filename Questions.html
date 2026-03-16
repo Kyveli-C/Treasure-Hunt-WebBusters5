@@ -171,10 +171,7 @@ function getQuestions()
 
             skipButton.style.color="black";
             skipButton.style.background="red";
-            if (jsonObject.canBeSkipped === false) {
-                //skipButton.disabled = true;
-                alert("This question cannot be skipped.");
-            }
+
 
             showPlayerScore();
         })
@@ -249,6 +246,12 @@ function skipQuestion() {
         .then(response => response.json())
         .then(jsonObject => {
             console.log(jsonObject);
+
+            if (jsonObject.canBeSkipped === false) {
+                skipButton.disabled = true;
+                //alert("This question cannot be skipped.");
+               // return;
+            }
 
     if(jsonObject.completed===true) {
         window.location.href = "leaderboard.html";

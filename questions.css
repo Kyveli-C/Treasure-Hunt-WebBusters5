@@ -128,6 +128,11 @@ body {
     background: rgba(255, 255, 255, 0.1);
 }
 
+/*make it appear lighter so the user knows it cannot be pressed */
+#skipButton.disabled {
+opacity:0.5;
+
+}
 .feedback {
     text-align: center;
     font-weight: bold;
