@@ -253,13 +253,13 @@ input:checked + .slider:before {
 }
 
 #switchCameras{
-    position: fixed;
-    top: 200px;
-    right: 400px;
+
+    top: 50px;
+    right: 200px;
     background: grey;
     color: #1a120b;
     border: none;
-    padding: 20px 30px;
+    padding:30px;
     border-radius: 50%;
     font-weight: bold;
     cursor: pointer;
