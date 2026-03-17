@@ -32,6 +32,11 @@
 <script>
     document.getElementById("refreshBtn").onclick = () => location.reload();
 </script>
+
+<a href="index.html"><button>Home</button></a>
+<a href="leaderboard.html"><button>Leader Board</button></a>
+
+
 <div style="margin: 20px; padding: 20px; background-color: black; color: white; text-align: center;" id="content">
     Scan a QR code to get a hint...
 </div>
@@ -154,6 +159,7 @@ function getQuestions()
             }
 
             input.placeholder = "Enter your answer";
+
             giveAnswer.appendChild(input);
 
             let submitButton = document.createElement("button");
@@ -414,10 +420,11 @@ function switchCamera() {
 function showHelp() {
     alert(
         "How to play:\n\n" +
-        "1. Click Start the game\n" +
-        "2. Log in with your username\n" +
-        "3. Answer the questions\n" +
-        "4. Each correct answer gives 10 points"
+        "1. Answer the question\n" +
+        "2. If it's correct the next one should appear\n" +
+        "3. If it's wrong try another answer \n" +
+        "4. Each correct answer gives 10 points\n" +
+        "5. Skipping answers means losing points"
     );
 }
 getQuestions();
