@@ -26,6 +26,8 @@
 
 </header>
 
+<button id="Help" onclick="showHelp()">Help</button>
+
 <button id="refreshBtn" title="Refresh">Refresh</button>
 <script>
     document.getElementById("refreshBtn").onclick = () => location.reload();
@@ -409,7 +411,15 @@ function switchCamera() {
     scanner.start(camera);
 }
 
-
+function showHelp() {
+    alert(
+        "How to play:\n\n" +
+        "1. Click Start the game\n" +
+        "2. Log in with your username\n" +
+        "3. Answer the questions\n" +
+        "4. Each correct answer gives 10 points"
+    );
+}
 getQuestions();
 showPlayerScore();
 </script>
