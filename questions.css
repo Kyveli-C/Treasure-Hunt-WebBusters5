@@ -262,13 +262,14 @@ input:checked + .slider:before {
 
 #switchCameras{
     position: fixed;
-    top: 10vh;
-    right: 10vw;
+    top: 70px;
+    right: 20px;
     background: grey;
     color: #1a120b;
+    width: 140px;
     border: none;
-    padding:30px;
-    border-radius: 50%;
+    padding:12px;
+    border-radius: 10px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -287,4 +288,23 @@ input:checked + .slider:before {
     cursor: pointer;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
     transition: 0.7s;
+}
+
+@media (max-width: 600px) {
+    #refreshBtn,
+    #switchCameras {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        position: absolute;
+    }
+
+    #refreshBtn {
+        top: 10px;
+    }
+
+    #switchCameras {
+        top: 60px;
+        height: 35px;
+    }
 }
