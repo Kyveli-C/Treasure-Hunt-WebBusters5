@@ -122,6 +122,7 @@ body {
     border-radius: 25px;
     color: antiquewhite;
     cursor: pointer;
+
 }
 
 #skipButton:hover {
@@ -295,12 +296,13 @@ input:checked + .slider:before {
     #switchCameras {
         right: auto;
         left: 50%;
-        transform: translateX(-50%);
+        transform: translateX(95%);
         position: absolute;
     }
 
     #refreshBtn {
         top: 10px;
+        margin-left: 100px ;
     }
 
     #switchCameras {
@@ -314,7 +316,7 @@ input:checked + .slider:before {
     margin: 10px;
     border-radius: 20px;
     border: none;
-    background: #d4af37;
+    background: burlywood;
     color: #1a120b;
     font-weight: bold;
     transition: 0.3s;
