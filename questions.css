@@ -310,17 +310,26 @@ input:checked + .slider:before {
 }
 
 #Help {
-    text-align: center;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 20px;
+    border: none;
+    background: #d4af37;
+    color: #1a120b;
     font-weight: bold;
-    background-color: #2196F3;
+    transition: 0.3s;
 }
 
 
 #Leaderboard button{
-    display: flex;
-    flex-direction: column;
-    background-color: #2196F3;
-    color: red;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 20px;
+    border: none;
+    background: #d4af37;
+    color: #1a120b;
+    font-weight: bold;
+    transition: 0.3s;
 }
 
 #Leaderboard{
@@ -330,10 +339,14 @@ input:checked + .slider:before {
 
 
 #Home button {
-    display: flex;
-    flex-direction: column;
-    background-color: #2196F3;
-    color: red;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 20px;
+    border: none;
+    background: #d4af37;
+    color: #1a120b;
+    font-weight: bold;
+    transition: 0.3s;
 }
 
 #Home {
