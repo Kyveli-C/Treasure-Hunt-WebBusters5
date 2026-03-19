@@ -316,18 +316,28 @@ input:checked + .slider:before {
 }
 
 
-#Leaderboard a{
+#Leaderboard button{
     display: flex;
     flex-direction: column;
     background-color: #2196F3;
     color: red;
 }
 
+#Leaderboard{
+    text-decoration:none;
 
-#Home a {
+}
+
+
+#Home button {
     display: flex;
     flex-direction: column;
     background-color: #2196F3;
     color: red;
+}
+
+#Home {
+    text-decoration:none;
+
 }
 
