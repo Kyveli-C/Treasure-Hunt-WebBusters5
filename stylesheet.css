@@ -111,20 +111,18 @@ p{
 
 /* UPDATED: modern refresh button (not floating, not childish) */
 #refreshBtn {
-    position: static;
-    margin-top: 12px;
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.25);
-    background: rgba(0,0,0,0.25);
-    color: antiquewhite;
-    font-size: 14px;
-    cursor: pointer;
-    backdrop-filter: blur(6px);
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 20px;
+    border: none;
+    background: #d4af37;
+    color: #1a120b;
+    font-weight: bold;
+    transition: 0.3s;
 }
 
 #refreshBtn:hover {
-    background: rgba(0,0,0,0.35);
+    background: green;
 }
 
 .Hunt-box1 {
@@ -206,4 +204,28 @@ p{
     font-size: clamp(1rem, 4vw, 1.5rem);
     margin-bottom : 20px;
     font-weight: 600;
+}
+
+
+#Home Button{
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 20px;
+    border: none;
+    background: #d4af37;
+    color: #1a120b;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+#Back Button{
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 20px;
+    border: none;
+    background: #d4af37;
+    color: #1a120b;
+    font-weight: bold;
+    transition: 0.3s;
+
 }
