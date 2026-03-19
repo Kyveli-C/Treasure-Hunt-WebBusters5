@@ -308,3 +308,26 @@ input:checked + .slider:before {
         height: 35px;
     }
 }
+
+#Help {
+    text-align: center;
+    font-weight: bold;
+    background-color: #2196F3;
+}
+
+
+#Leaderboard a{
+    display: flex;
+    flex-direction: column;
+    background-color: #2196F3;
+    color: red;
+}
+
+
+#Home a {
+    display: flex;
+    flex-direction: column;
+    background-color: #2196F3;
+    color: red;
+}
+
