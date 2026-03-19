@@ -304,6 +304,17 @@ function sendLocationAndAnswerQuestion() {
     );
 }
 
+function refreshLocation() {
+    if (!navigator.geolocation) {
+        console.log("Geolocation is not supported by your browser.");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition((pos)=>{
+        console.log("Updated location: ",pos.coords.latitude, pos.coords.longitude);
+    })
+}
+
 function showPosition(position) {
     let lat = position.coords.latitude;
     let lng = position.coords.longitude;
@@ -429,6 +440,7 @@ function showHelp() {
         "5. Skipping answers means losing points"
     );
 }
+setInterval(refreshLocation, 30000);//https://www.youtube.com/watch?v=jKQUHGpOHqg
 getQuestions();
 showPlayerScore();
 </script>
