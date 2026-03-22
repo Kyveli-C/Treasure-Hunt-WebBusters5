@@ -40,12 +40,14 @@
 <div style="margin: 20px; padding: 20px; background-color: black; color: white; text-align: center;" id="content">
     Scan a QR code to get a hint...
 </div>
-<label class="switch">
-    <input type="checkbox" id="cameraToggle">
+<div class="camera-controls">
+    <label class="switch">
+        <input type="checkbox" id="cameraToggle">
+        <span class="slider round"></span>
+    </label>
 
     <button id="switchCameras" onclick="switchCamera()">Switch Camera</button>
-    <span class="slider round"></span>
-</label>
+</div>
 <div class="camera-container">
     <video id="preview" autoplay muted playsinline></video>
 </div>
@@ -302,6 +304,17 @@ function sendLocationAndAnswerQuestion() {
     );
 }
 
+function refreshLocation() {
+    if (!navigator.geolocation) {
+        console.log("Geolocation is not supported by your browser.");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition((pos)=>{
+        console.log("Updated location: ",pos.coords.latitude, pos.coords.longitude);
+    })
+}
+
 function showPosition(position) {
     let lat = position.coords.latitude;
     let lng = position.coords.longitude;
@@ -377,24 +390,24 @@ scanner.addListener("scan", function (content) {
 
 document.getElementById("cameraToggle").addEventListener("change", function () {
     if (this.checked) {
+        document.getElementById("switchCameras").style.display = "block";
+
         Instascan.Camera.getCameras().then(function (cameras) {
             cameraArray = cameras;
             if (cameras.length > 0) {
                 scanner.start(cameras[0]);
-                //cameraToggle.checked = true;
             } else {
                 setFeedback("No camera found.");
                 document.getElementById("cameraToggle").checked = false;
+                document.getElementById("switchCameras").style.display = "none";
             }
-        })
-
+        });
 
     } else {
+        document.getElementById("switchCameras").style.display = "none";
         scanner.stop();
         document.getElementById("preview").srcObject = null;
     }
-
-
 });
 
 let cameraArray=[]
@@ -427,6 +440,7 @@ function showHelp() {
         "5. Skipping answers means losing points"
     );
 }
+setInterval(refreshLocation, 30000);//https://www.youtube.com/watch?v=jKQUHGpOHqg
 getQuestions();
 showPlayerScore();
 </script>

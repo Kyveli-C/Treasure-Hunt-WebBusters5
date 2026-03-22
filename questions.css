@@ -125,6 +125,10 @@ body {
 
 }
 
+#skipButton {
+    margin-top: 25px;
+}
+
 #skipButton:hover {
     background: rgba(255, 255, 255, 0.1);
 }
@@ -199,16 +203,36 @@ opacity:0.5;
 /*    width: 0;*/
 /*    height: 0;*/
 /*}*/
+.camera-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0 20px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
 
 .slider {
     position: absolute;
     cursor: pointer;
-    top: 217px;
-    left: 500px;
-
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: #ccc;
     transition: .4s;
-
 }
 
 .slider:before {
@@ -222,15 +246,15 @@ opacity:0.5;
     transition: .4s;
 }
 
-input:checked + .slider {
+.switch input:checked + .slider {
     background-color: #2196F3;
 }
 
-input:focus + .slider {
+.switch input:focus + .slider {
     box-shadow: 0 0 1px #2196F3;
 }
 
-input:checked + .slider:before {
+.switch input:checked + .slider:before {
     transform: translateX(26px);
 }
 
@@ -241,6 +265,7 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
 
 @media (min-width: 900px) {
     .main-layout {
@@ -273,6 +298,7 @@ input:checked + .slider:before {
     border-radius: 10px;
     font-weight: bold;
     cursor: pointer;
+    display: none;
 }
 
 
