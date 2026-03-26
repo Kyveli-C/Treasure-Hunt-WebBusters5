@@ -39,7 +39,7 @@ body {
     background: rgba(15, 10, 5, 0.85);
     padding: 25px;
     border-radius: 25px;
-    width: 90%;
+    width: 100%;
     max-width: 600px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
     border: 1px solid rgba(212, 175, 55, 0.3);
@@ -205,10 +205,12 @@ opacity:0.5;
 /*}*/
 .camera-controls {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 15px;
     margin: 15px 0 20px;
+    width: 100%;
 }
 
 .switch {
@@ -286,26 +288,21 @@ opacity:0.5;
     }
 }
 
-#switchCameras{
-    position: fixed;
-    top: 70px;
-    right: 20px;
+#switchCameras {
     background: grey;
     color: #1a120b;
     width: 140px;
     border: none;
-    padding:12px;
+    padding: 12px;
     border-radius: 10px;
     font-weight: bold;
     cursor: pointer;
     display: none;
+    margin: 0 auto;
 }
 
 
 #refreshBtn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
     background: #d4af37;
     color: #1a120b;
     border: none;
@@ -315,25 +312,14 @@ opacity:0.5;
     cursor: pointer;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
     transition: 0.7s;
+    display: block;
+    margin: 10px auto;
 }
 
 @media (max-width: 600px) {
-    #refreshBtn,
     #switchCameras {
-        right: auto;
-        left: 50%;
-        transform: translateX(95%);
-        position: absolute;
-    }
-
-    #refreshBtn {
-        top: 10px;
-        margin-left: 100px ;
-    }
-
-    #switchCameras {
-        top: 60px;
         height: 35px;
+        margin: 0 auto;
     }
 }
 
@@ -382,3 +368,31 @@ opacity:0.5;
 
 }
 
+@media (max-width: 600px){
+    body{
+        padding: 12px;
+    }
+    .page{
+        max-width: 100%;
+        padding: 12px;
+        min-height: auto;
+        gap: 10px;
+    }
+    h1{
+        font-size: clamp(1.5rem, 6vw, 2rem);
+        margin-bottom: 12px;
+    }
+
+    #introduction{
+        font-size: 1em;
+    }
+    #team{
+        border-radius: 20px;
+        padding: 10px;
+        font-size: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    #rulesOfTheGames{
+        padding: 12px;
+    }
+}
