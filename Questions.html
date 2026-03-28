@@ -432,21 +432,24 @@ document.getElementById("cameraToggle").addEventListener("change", function () {
 let cameraArray=[]
 let cameraIndex=0;
 function switchCamera() {
-    scanner.stop();
-    //Cycle through the available cameras:
-    if (cameraIndex < cameraArray.length - 1) {
-        cameraIndex++;
-    }
-    else {
-        cameraIndex = 0;
+    scanner.stop().then(()=>{
+        //Cycle through the available cameras:
+        if (cameraIndex < cameraArray.length - 1) {
+            cameraIndex++;
+        }
+        else
+        {
+            cameraIndex = 0;
 
-    }
 
-    //Find the next camera to use:
-    let camera = cameraArray[cameraIndex];
+        }
 
-    //Start the new selected camera:
-    scanner.start(camera);
+        //Find the next camera to use:
+        let camera = cameraArray[cameraIndex];
+
+        //Start the new selected camera:
+        scanner.start(camera);
+    });
 }
 
 function showHelp() {
