@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Unit test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stylesheet.css">
+    <!--PWA-->
+    <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
+    <meta name="theme-color" content="green"/>
+    <link rel="icon" href="FinalLogo-removebg-preview.png" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="FinalLogo-removebg-preview.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="teal">
+    <meta name="apple-mobile-web-app-title" content="Simple app">
+    <meta name="msapplication-TileImage" content="logo.png">
+    <meta name="msapplication-TileColor" content="#008080">
+</head>
+
+<body>
+<a id="unitButton" href="unitTesting.html"><button>Unit Testing</button></a>
+<a id="userAcceptanceButton" href="UserAcceptance.html"><button>User Acceptance Test</button></a>
+<a id="hieuristicsButton" href="heuristicsEvaluation.html"><button>Heuristic Evaluation</button></a>
+<a id="test" href="test.html"><button> Back to the tests</button></a>
+
+<p>Enter input:</p>
+
+<form action="javascript:testLeaderboardManually()">
+    <input type="number" id="size" />
+    <button id="submit">Submit</button>
+</form>
+
+<h3 id = "playerScore">Unit testing: </h3>
+
+<table id="test-results-table" border="1">
+    <tr>
+        <th>Input</th>
+        <th>Expected leaderboard size</th>
+        <th>Computed leaderboard size</th>
+        <th>Expected numOfPlayers</th>
+        <th>Computed numOfPlayers</th>
+        <th>Expected status</th>
+        <th>Computed status</th>
+        <th>Pass/Fail</th>
+    </tr>
+</table>
+
+
+
+<script>
+
+    const testResultsTable = document.getElementById('test-results-table');
+
+    testPairs = [
+        { size: 1, leaderboardSize: 1, numOfPlayers: 1, status: "OK" },
+        { size: 3, leaderboardSize: 3, numOfPlayers: 3, status: "OK" },
+        { size: -1, leaderboardSize: 0, numOfPlayers: 0, status: "ERROR" },
+    ]
+
+    const scorePairs = [
+        { score: 10, expectedScore: 10 },
+        { score: 2000, expectedScore: 1000 },
+        { score: -2000, expectedScore: -1000 },
+        { score: "abc", expectedScore: 42 },
+    ]
+
+    async function testLeaderboardManually() {
+        const sizeField = document.getElementById('size');
+        const size = Number(sizeField.value);
+        const response = await fetch(`https://codecyprus.org/th/test-api/leaderboard?size=${size}`);
+        const json = await response.json();
+        const status = json.status;
+        const leaderboardSize = json.leaderboard.length;
+        const numOfPlayers = json.numOfPlayers;
+        if (status === "OK") {
+            if (leaderboardSize === size && numOfPlayers === size) {
+                alert("PASS");
+            }
+        }
+        else {
+            alert("FAIL");
+        }
+
+    }
+
+    async function getLeaderboard() {
+        const sizeField = document.getElementById('size');
+        const size = Number(sizeField.value);
+        let html = "";
+
+        for (let pair of scorePairs) {
+            const response = await fetch(`https://codecyprus.org/th/test-api/leaderboard?size=${pair.size}`);
+            const json = await response.json();
+            const status = json.status;
+            const leaderboardSize = json.leaderboard.length;
+            const numOfPlayers = json.numOfPlayers;
+
+            // console.log(pair.size);
+            // console.log(pair.numOfPlayers);
+            // console.log(pair.status);
+
+            // console.log(pair);
+
+            let success = true;
+            if (status !== pair.status) {
+                success = false;
+            }
+            if (leaderboardSize !== pair.leaderboardSize) {
+                success = false;
+            }
+            if (numOfPlayers !== pair.numOfPlayers) {
+                success = false;
+            }
+
+            // console.log(status);
+            // console.log(leaderboardSize);
+            // console.log(numOfPlayers);
+
+            html += "<tr>" +
+                "    <td>" + size + "</td>\n" +
+                "    <td>" + pair.leaderboardSize + "</td>\n" +
+                "    <td>" + leaderboardSize + "</td>\n" +
+                "    <td>" + pair.numOfPlayers + "</td>\n" +
+                "    <td>" + numOfPlayers +"</td>\n" +
+                "    <td>" + pair.status + "</td>\n" +
+                "    <td>" + status + "</td>\n" +
+                "    <td>" + (success ? "✅" : "❌") + "</td>" +
+                "</tr>";
+        }
+
+
+
+        testResultsTable.innerHTML += html;
+
+    }
+
+    getLeaderboard();
+
+    async function getPlayerScore() {
+
+        let html = "";
+
+        for (let pair of scorePairs) {
+
+            const response = await fetch(`https://codecyprus.org/th/test-api/score?score=${pair.score}`);
+            const json = await response.json();
+
+            const computedScore = json.score;
+            const status = json.status;
+
+            let success = true;
+            if (computedScore !== pair.expectedScore) {
+                success = false;
+            }
+
+            html += "<tr>" +
+                "<td>" + pair.score + "</td>" +
+                "<td>" + pair.expectedScore + "</td>" +
+                "<td>" + computedScore + "</td>" +
+                "<td colspan='3'>Score Test</td>" +
+                "<td>" + status + "</td>" +
+                "<td>" + (success ? "✅" : "❌") + "</td>" +
+                "</tr>";
+        }
+
+        testResultsTable.innerHTML += html;
+    }
+    getPlayerScore();
+
+    function showQuestions(question) {
+        console.log("Question type:", question.questionType);
+        console.log("Can be skipped:", question.canBeSkipped);
+        console.log("Requires location:", question.requiresLocation);
+        console.log("Total number of questions:", question.numOfQuestions);
+        console.log("Current question index:", question.currentQuestionIndex);
+        console.log("Score if correct:", question.correctScore);
+        console.log("Score if wrong:", question.wrongScore);
+        console.log("Score if skipped:", question.skipScore);
+    }
+
+    fetch("https://codecyprus.org/th/test-api/question")
+        .then(response => response.json())
+        .then(json => {
+            if (json.status === "OK") {
+                showQuestions(json);
+            }
+            else{
+                console.log("Error loading Question");
+            }
+
+        });
+
+</script>
+
+</body>
+</html>

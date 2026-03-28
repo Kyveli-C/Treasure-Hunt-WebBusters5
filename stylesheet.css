@@ -245,3 +245,62 @@ p{
     background-color: #e9d66b;
     color:black;
 }
+
+#specifications th,td
+{
+    border: 1px solid black;
+    background-color: #e9d66b;
+    color:black;
+}
+#unitButton Button
+{
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 20px;
+    border: none;
+    background: #d4af37;
+    color: #1a120b;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+#results  th,td
+{
+    border: 1px solid black;
+    background-color: #e9d66b;
+    color:black;
+}
+#userAcceptanceButton Button
+{
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 20px;
+    border: none;
+    background: #d4af37;
+    color: #1a120b;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+#hieuristicsButton Button
+{
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 20px;
+    border: none;
+    background: #d4af37;
+    color: #1a120b;
+    font-weight: bold;
+    transition: 0.3s;
+}
+#test Button
+{
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 20px;
+    border: none;
+    background: #d4af37;
+    color: #1a120b;
+    font-weight: bold;
+    transition: 0.3s;
+}
