@@ -304,3 +304,28 @@ p{
     font-weight: bold;
     transition: 0.3s;
 }
+
+/* Notes Page*/
+#meetings p
+{
+    border: 5px solid black;
+    background-color: #d4af37;
+    color:black;
+    padding:10px;
+}
+
+#team p
+{
+    border: 5px solid white;
+    background-color: #d4af37;
+    color:black;
+    padding:10px;
+}
+
+#intro
+{
+    border: 5px solid saddlebrown;
+    background-color: #d4af37;
+    color:black;
+    padding:10px;
+}
