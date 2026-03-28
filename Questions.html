@@ -26,6 +26,7 @@
 
 </header>
 
+
 <button id="Help" onclick="showHelp()">Help</button>
 
 <button id="refreshBtn" title="Refresh">Refresh</button>
@@ -51,6 +52,7 @@
 <div class="camera-container">
     <video id="preview" autoplay muted playsinline></video>
 </div>
+<div id="questionNumber"></div>
 <div class="main-layout">
     <div class="question-card">
         <h1>Treasure Hunt Questions</h1>
@@ -73,6 +75,7 @@
 
 <script>
 const session = getCookie("sessionId");
+let numberIndex=1;
 
 let requiresLocationQuestion = false;
 let locationSentQuestion = false;
@@ -101,7 +104,10 @@ function showPlayerScore()
 
         });
 }
-
+// function updateQuestionNumber()
+// {
+//
+// }
 function getQuestions()
 {
     fetch(`https://codecyprus.org/th/api/question?session=${session}`)
@@ -109,6 +115,11 @@ function getQuestions()
         .then(jsonObject => {
             console.log(jsonObject);
 
+            console.log(jsonObject.numOfQuestions);
+            let totalQuestions=jsonObject.numOfQuestions;
+            let numberOfQuestion=document.getElementById("questionNumber");
+
+            numberOfQuestion.innerHTML="Question "+""+numberIndex+" of " +""+totalQuestions;
 
             if (jsonObject.status === "OK")
             {
@@ -181,12 +192,17 @@ function getQuestions()
 
             skipButton.style.color="black";
             skipButton.style.background="red";
-
+console.log(jsonObject);
 
             showPlayerScore();
+            updateQuestionNumber();
         })
 
 }
+
+
+
+
 
 function submitButtonsAnswers(answer) {
     pendingAnswer = answer;
@@ -197,6 +213,7 @@ function submitAnswers() {
     let answerInput = document.getElementById("answer");
     let playersAnswers = ""; //clear the previous
 
+    numberIndex++;
     if (pendingAnswer) {
         playersAnswers = pendingAnswer.trim(); //used trim because we used type number- it removes any extra spaces so that API can read the number correctly
     } else if (answerInput) {
@@ -244,6 +261,7 @@ function submitAnswers() {
                 window.location.href = "leaderboard.html";
 
             } else {
+
                 getQuestions();
             }
 
@@ -257,6 +275,7 @@ function skipQuestion() {
         .then(jsonObject => {
             console.log(jsonObject);
 
+            numberIndex++;
             if (jsonObject.canBeSkipped === false) {
                 skipButton.disabled = true;
                 //alert("This question cannot be skipped.");

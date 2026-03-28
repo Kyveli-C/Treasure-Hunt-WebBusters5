@@ -237,3 +237,10 @@ p{
 #Home:hover Button {
     background: green;
 }
+
+/* Testing page */
+#heuristics th,td
+{
+    border: 1px solid black;
+    background-color: #d4af37;
+}
