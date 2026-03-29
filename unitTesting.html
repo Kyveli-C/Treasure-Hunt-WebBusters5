@@ -31,7 +31,8 @@
     <button id="submit">Submit</button>
 </form>
 
-<h3 id = "playerScore">Unit testing: </h3>
+<h3 id = "playerScore">Leader Board Test: </h3>
+<p> <b>Ask the leaderboard to show you the number of users you want (input)<br> Negative numbers should have a status fail<br> Try the box above to test this</b></p>
 <div style="overflow-x:auto;">
 <table id="test-results-table" border="1">
     <tr>
@@ -69,6 +70,7 @@
         <th>Score if Correct</th>
         <th>Score if Wrong</th>
         <th>Score if Skipped</th>
+        <th>Status</th>
 
     </tr>
 </table>
@@ -105,20 +107,17 @@
         if (status === "OK") {
             if (leaderboardSize === size && numOfPlayers === size) {
                 alert("PASS");
+            } else {
+                alert("FAIL");
             }
         }
-        else {
-            alert("FAIL");
-        }
-
     }
 
     async function getLeaderboard() {
-        const sizeField = document.getElementById('size');
-        const size = Number(sizeField.value);
+
         let html = "";
 
-        for (let pair of scorePairs) {
+        for (let pair of testPairs) {
             const response = await fetch(`https://codecyprus.org/th/test-api/leaderboard?size=${pair.size}`);
             const json = await response.json();
             const status = json.status;
@@ -139,7 +138,7 @@
 
 
             html += "<tr>" +
-                "    <td>" + size + "</td>\n" +
+                "    <td>" + pair.size + "</td>\n" +
                 "    <td>" + pair.leaderboardSize + "</td>\n" +
                 "    <td>" + leaderboardSize + "</td>\n" +
                 "    <td>" + pair.numOfPlayers + "</td>\n" +
@@ -210,15 +209,14 @@
                 "    <td>" + question.correctScore + "</td>\n" +
                 "    <td>" + question.wrongScore + "</td>\n" +
                 "    <td>" + question.scoreIfSkipped + "</td>\n" +
-
-                // "    <td>" + (success ? "✅" : "❌") + "</td>" +
+              "  <td>" + (question.success ? "✅" : "❌") + "</td>" +
                 "</tr>";
                 questionTable.innerHTML+=html;
         }
 
     })
 
-    //showQuestions();
+
 
 </script>
 
