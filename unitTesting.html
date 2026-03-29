@@ -47,10 +47,39 @@
 </table>
 </div>
 
+<table id="score">
+    <tr>
+        <th>Input Score</th>
+        <th>Expected Score</th>
+        <th>Computed Score</th>
+        <th></th>
+        <th>Status</th>
+        <th>Pass/Fail</th>
+
+    </tr>
+</table>
+
+<table id="question">
+    <tr>
+        <th>Question Type</th>
+        <th>Can be skipped</th>
+        <th>Requires Location</th>
+        <th>Total Questions</th>
+        <th>Current Index</th>
+        <th>Score if Correct</th>
+        <th>Score if Wrong</th>
+        <th>Score if Skipped</th>
+
+    </tr>
+</table>
+
+
 
 <script>
 
     const testResultsTable = document.getElementById('test-results-table');
+    const scoreTable = document.getElementById('score');
+    const questionTable = document.getElementById('question');
 
     testPairs = [
         { size: 1, leaderboardSize: 1, numOfPlayers: 1, status: "OK" },
@@ -146,6 +175,7 @@
                 success = false;
             }
 
+
             html += "<tr>" +
                 "<td>" + pair.score + "</td>" +
                 "<td>" + pair.expectedScore + "</td>" +
@@ -155,33 +185,40 @@
                 "<td>" + (success ? "✅" : "❌") + "</td>" +
                 "</tr>";
         }
+        scoreTable.innerHTML+=html;
 
-        testResultsTable.innerHTML += html;
+
     }
     getPlayerScore();
 
-    function showQuestions(question) {
-        console.log("Question type:", question.questionType);
-        console.log("Can be skipped:", question.canBeSkipped);
-        console.log("Requires location:", question.requiresLocation);
-        console.log("Total number of questions:", question.numOfQuestions);
-        console.log("Current question index:", question.currentQuestionIndex);
-        console.log("Score if correct:", question.correctScore);
-        console.log("Score if wrong:", question.wrongScore);
-        console.log("Score if skipped:", question.skipScore);
-    }
-
+    //function showQuestions(question) {
     fetch("https://codecyprus.org/th/test-api/question")
         .then(response => response.json())
         .then(json => {
             if (json.status === "OK") {
-                showQuestions(json);
-            }
-            else{
-                console.log("Error loading Question");
-            }
+            const question=json;
+            // }
+            // else{
+            //     console.log("Error loading Question");
+            //}
+          let  html = "<tr>" +
+                "    <td>" + question.questionType + "</td>\n" +
+                "    <td>" + question.canBeSkipped + "</td>\n" +
+                "    <td>" + question.requiresLocation + "</td>\n" +
+                "    <td>" + question.numOfQuestions + "</td>\n" +
+                "    <td>" + question.currentQuestionIndex + "</td>\n" +
+                "    <td>" + question.correctScore + "</td>\n" +
+                "    <td>" + question.wrongScore + "</td>\n" +
+                "    <td>" + question.scoreIfSkipped + "</td>\n" +
 
-        });
+                // "    <td>" + (success ? "✅" : "❌") + "</td>" +
+                "</tr>";
+                questionTable.innerHTML+=html;
+        }
+
+    })
+
+    //showQuestions();
 
 </script>
 
