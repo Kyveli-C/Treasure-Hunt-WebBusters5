@@ -75,7 +75,7 @@
 
 <script>
 const session = getCookie("sessionId");
-let numberIndex=1;
+
 
 let requiresLocationQuestion = false;
 let locationSentQuestion = false;
@@ -118,8 +118,9 @@ function getQuestions()
             console.log(jsonObject.numOfQuestions);
             let totalQuestions=jsonObject.numOfQuestions;
             let numberOfQuestion=document.getElementById("questionNumber");
+            let questionIndex=jsonObject.currentQuestionIndex+1;
 
-            numberOfQuestion.innerHTML="Question "+""+numberIndex+" of " +""+totalQuestions;
+            numberOfQuestion.innerHTML="Question "+""+questionIndex+" of " +""+totalQuestions;
 
             if (jsonObject.status === "OK")
             {
@@ -195,7 +196,7 @@ function getQuestions()
 console.log(jsonObject);
 
             showPlayerScore();
-            updateQuestionNumber();
+
         })
 
 }
@@ -213,7 +214,7 @@ function submitAnswers() {
     let answerInput = document.getElementById("answer");
     let playersAnswers = ""; //clear the previous
 
-    numberIndex++;
+
     if (pendingAnswer) {
         playersAnswers = pendingAnswer.trim(); //used trim because we used type number- it removes any extra spaces so that API can read the number correctly
     } else if (answerInput) {
@@ -275,10 +276,10 @@ function skipQuestion() {
         .then(jsonObject => {
             console.log(jsonObject);
 
-            numberIndex++;
+
             if (jsonObject.canBeSkipped === false) {
                 skipButton.disabled = true;
-                //alert("This question cannot be skipped.");
+                alert("This question cannot be skipped.");
                // return;
             }
 
