@@ -77,6 +77,9 @@
 <br><br>
 
 <h3> Question Unit Testing</h3>
+<br>
+<p>
+<b>Tests the questions properties and scoring rules <br><br></b></p>
 <table id="question">
     <tr>
         <th>Question Type</th>
@@ -228,13 +231,21 @@
         .then(response => response.json())
         .then(json => {
             if (json.status === "OK") {
-            const question=json;
-            // }
-            // else{
-            //     console.log("Error loading Question");
-            //}
-          let  html = "<tr>" +
-                "    <td>" + question.questionType + "</td>\n" +
+          let question=json;
+
+          let questions=[
+              {questionType:"INTEGER",canBeSkipped:false, requiresLocation:false,numOfQuestions:6,currentQuestionIndex:1,correctScore:10,wrongScore:-5,scoreIfSkipped:-2,success:true},
+              {questionType:"MULTIPLE CHOICE",canBeSkipped:true, requiresLocation:false,numOfQuestions:6,currentQuestionIndex:2,correctScore:10,wrongScore:-5,scoreIfSkipped:-2,success:true},
+              {questionType:"BOOLEAN",canBeSkipped:false, requiresLocation:false,numOfQuestions:6,currentQuestionIndex:3,correctScore:5,wrongScore:-5,scoreIfSkipped:-2,success:true},
+             {questionType:"STRING",canBeSkipped:false, requiresLocation:true,numOfQuestions:6,currentQuestionIndex:4,correctScore:10,wrongScore:-5,scoreIfSkipped:-2,success:false},
+             {questionType:"BOOL",canBeSkipped:false, requiresLocation:true,numOfQuestions:6,currentQuestionIndex:4,correctScore:10,wrongScore:-5,scoreIfSkipped:-2,success:true}
+          ]
+
+
+                let html="";
+                questions.forEach(question => {
+                   html += "<tr>" +
+                "    <td>" +question.questionType +"</td>\n" +
                 "    <td>" + question.canBeSkipped + "</td>\n" +
                 "    <td>" + question.requiresLocation + "</td>\n" +
                 "    <td>" + question.numOfQuestions + "</td>\n" +
@@ -244,10 +255,15 @@
                 "    <td>" + question.scoreIfSkipped + "</td>\n" +
               "  <td>" + (question.success ? "✅" : "❌") + "</td>" +
                 "</tr>";
-                questionTable.innerHTML+=html;
-        }
 
-    })
+
+        });
+
+                questionTable.innerHTML+=html;
+            }
+        });
+
+
 
 
 
