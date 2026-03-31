@@ -5,7 +5,6 @@ body{
     rgba(31, 32, 35, 0.55)
     ),
     url("https://wallpaperaccess.com/full/2688249.jpg") ;
-    /* url("https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1"); THE POSSIBLE SECOND BACKGROUND PHOTO*/
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -19,8 +18,6 @@ body{
     padding: 32px;
     font-size:18px;
 }
-
-
 
 h2{
     color:black;
@@ -141,16 +138,6 @@ footer {
     text-align: left;
     margin-top: 8px;
 }
-
-
-/*#switchCameras{*/
-/*    position: fixed;*/
-/*    top: 20px;*/
-/*    right: 50px;*/
-/*    background: #d4af37;*/
-/*    color: #1a120b;*/
-/*    border: none;*/
-/*}*/
 
 p{
     margin: 6px 0;
